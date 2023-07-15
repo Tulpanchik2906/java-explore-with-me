@@ -23,9 +23,9 @@ import java.util.List;
 @Validated
 public class StatsController {
 
-    private final HitService hitService;
+    private final String dateTimeFormat = "yyyy-MM-dd HH:mm:ss";
 
-    private final static String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    private final HitService hitService;
 
     @GetMapping
     public List<ViewStats> getStats(
@@ -37,9 +37,9 @@ public class StatsController {
 
         StatsSearchParam statsSearchParam = StatsSearchParam.builder()
                 .start(LocalDateTime.parse(URLDecoder.decode(start),
-                        DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)))
+                        DateTimeFormatter.ofPattern(dateTimeFormat)))
                 .end(LocalDateTime.parse(URLDecoder.decode(end),
-                        DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)))
+                        DateTimeFormatter.ofPattern(dateTimeFormat)))
                 .uris(uris)
                 .unique(unique)
                 .build();
