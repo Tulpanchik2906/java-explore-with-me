@@ -6,7 +6,6 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import ru.practicum.dto.CreateEndpointHitDto;
@@ -36,7 +35,7 @@ public class StatClient {
                 serverUrl + "/hit", request, EndpointHitDto.class);
     }
 
-    public ResponseEntity<List<ViewStats>> getViewStats(@Nullable Map<String, Object> parameters) {
+    public ResponseEntity<List<ViewStats>> getViewStats(Map<String, Object> parameters) {
 
         String url = serverUrl + "/stats?start={start}&end={end}";
 
