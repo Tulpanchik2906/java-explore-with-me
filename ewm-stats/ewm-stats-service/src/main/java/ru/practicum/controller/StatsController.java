@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.dto.ViewStats;
+import ru.practicum.mapper.ViewStatsMapper;
 import ru.practicum.service.HitService;
 import ru.practicum.service.params.StatsSearchParam;
 
@@ -15,6 +16,7 @@ import java.net.URLDecoder;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/stats")
@@ -44,6 +46,8 @@ public class StatsController {
                 .unique(unique)
                 .build();
 
-        return hitService.findHits(statsSearchParam);
+        return hitService.findHits(statsSearchParam).stream()
+                .map(ViewStatsMapper.INSTANCE::toViewStats)
+                .collect(Collectors.toList());
     }
 }

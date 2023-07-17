@@ -4,8 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ShareMeApp {
+public class ExplorerWithMeApp {
     public static void main(String[] args) {
-        SpringApplication.run(ShareMeApp.class, args);
+        SpringApplication.run(ExplorerWithMeApp.class, args);
     }
 }
