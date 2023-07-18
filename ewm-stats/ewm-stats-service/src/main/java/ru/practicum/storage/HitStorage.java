@@ -6,7 +6,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.practicum.model.ViewStatsModel;
-import ru.practicum.service.params.StatsSearchParam;
+import ru.practicum.service.logic.params.StatsSearchParam;
 
 import java.util.List;
 

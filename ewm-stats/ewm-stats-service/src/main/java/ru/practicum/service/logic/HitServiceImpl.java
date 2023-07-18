@@ -1,10 +1,10 @@
-package ru.practicum.service;
+package ru.practicum.service.logic;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.model.Hit;
 import ru.practicum.model.ViewStatsModel;
-import ru.practicum.service.params.StatsSearchParam;
+import ru.practicum.service.logic.params.StatsSearchParam;
 import ru.practicum.storage.HitRepository;
 import ru.practicum.storage.HitStorage;
 

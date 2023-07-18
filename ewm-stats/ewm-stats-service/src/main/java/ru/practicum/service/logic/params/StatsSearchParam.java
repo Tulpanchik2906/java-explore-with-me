@@ -1,4 +1,4 @@
-package ru.practicum.service.params;
+package ru.practicum.service.logic.params;
 
 import lombok.Builder;
 import lombok.Data;

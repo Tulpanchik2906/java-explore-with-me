@@ -7,8 +7,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.CreateEndpointHitDto;
 import ru.practicum.dto.EndpointHitDto;
-import ru.practicum.mapper.HitMapper;
-import ru.practicum.service.HitService;
+import ru.practicum.service.mapper.EndpointHitMapperService;
 
 import javax.validation.Valid;
 
@@ -19,7 +18,7 @@ import javax.validation.Valid;
 @Validated
 public class EndpointHitController {
 
-    private final HitService hitService;
+    private final EndpointHitMapperService endpointHitMapperService;
 
     @PostMapping
     @ResponseBody
@@ -28,8 +27,6 @@ public class EndpointHitController {
             @Valid @RequestBody CreateEndpointHitDto createEndpointHitDto) {
         log.info("Получен запрос на запись о событии в сервисе статистики.");
 
-        return HitMapper.INSTANCE.toEndpointHitDto(
-                hitService.add(
-                        HitMapper.INSTANCE.toHit(createEndpointHitDto)));
+        return endpointHitMapperService.createHit(createEndpointHitDto);
     }
 }
