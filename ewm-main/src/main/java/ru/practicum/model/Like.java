@@ -3,6 +3,7 @@ package ru.practicum.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Getter
 @Setter
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "likes")
 @IdClass(LikeKey.class)
-public class Like {
+public class Like implements Serializable {
 
     @Id
     @JoinColumn(name = "user_id", referencedColumnName = "id")

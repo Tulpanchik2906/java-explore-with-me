@@ -4,6 +4,7 @@ import lombok.*;
 import ru.practicum.enums.EventState;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @Table(name = "events")
-public class Event {
+public class Event implements Serializable {
 
     @Id
     @Column(name = "id")

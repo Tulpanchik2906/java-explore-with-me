@@ -29,6 +29,16 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
+            <artifactId>ewm-stats-dto</artifactId>
+            <groupId>ru.practicum.ewm-stats.ewm-stats-dto</groupId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>ru.practicum.ewm-stats.ewm-stats-client</groupId>
+            <artifactId>ewm-stats-client</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-apt</artifactId>
             <version>${querydsl.version}</version>
@@ -104,7 +114,9 @@
                             <goal>process</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>../../../../../../../Dev/java-explore-with-me/ewm-main/target/generated-sources</outputDirectory>
+                            <outputDirectory>
+                                ../../../../../../../Dev/java-explore-with-me/ewm-main/target/generated-sources
+                            </outputDirectory>
                             <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
                         </configuration>
                     </execution>

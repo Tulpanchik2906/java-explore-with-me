@@ -3,6 +3,7 @@ package ru.practicum.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
@@ -13,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "compilations")
-public class Compilation {
+public class Compilation implements Serializable {
 
     @Id
     @Column(name = "id")

@@ -9,7 +9,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>ru.practicum.ewm-stats</groupId>
+    <groupId>ru.practicum.ewm-stats.ewm-stats-dto</groupId>
     <artifactId>ewm-stats-dto</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
