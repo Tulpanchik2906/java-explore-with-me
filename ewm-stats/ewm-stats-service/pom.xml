@@ -19,12 +19,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-        <dependency>
+            <groupId>ru.practicum.ewm-stats.ewm-stats-dto</groupId>
             <artifactId>ewm-stats-dto</artifactId>
-            <groupId>ru.practicum.ewm-stats</groupId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
