@@ -168,10 +168,9 @@ public class PublicUserController {
 
     @PutMapping("/{userId}/like/{eventId}")
     @ResponseBody
-    @ResponseStatus(HttpStatus.ACCEPTED)
     public LikeDto likeEvent(
             @PathVariable("userId") Long userId,
-            @PathVariable(value = "eventId") Long eventId) {
+            @PathVariable("eventId") Long eventId) {
         log.info("Получен запрос на лайк событию {} от пользователя {}.",
                 eventId, userId);
 
@@ -181,7 +180,6 @@ public class PublicUserController {
 
     @PutMapping("/{userId}/dislike/{eventId}")
     @ResponseBody
-    @ResponseStatus(HttpStatus.ACCEPTED)
     public LikeDto disLikeEvent(
             @PathVariable("userId") Long userId,
             @PathVariable(value = "eventId") Long eventId) {
@@ -189,6 +187,6 @@ public class PublicUserController {
                 eventId, userId);
 
         return LikeMapper.INSTANCE.toLikeDto(
-                likeService.like(userId, eventId, 0));
+                likeService.like(userId, eventId, -1));
     }
 }

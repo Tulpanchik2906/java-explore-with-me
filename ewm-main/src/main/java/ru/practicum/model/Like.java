@@ -17,12 +17,19 @@ import java.io.Serializable;
 public class Like implements Serializable {
 
     @Id
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @Column(name = "user_id")
+    private Long userId;
+
+    @Id
+    @Column(name = "event_id")
+    private Long eventId;
+
+    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
     @ManyToOne
     private User user;
 
     @Id
-    @JoinColumn(name = "event_id", referencedColumnName = "id")
+    @JoinColumn(name = "event_id", referencedColumnName = "id", insertable = false, updatable = false)
     @ManyToOne
     private Event event;
 

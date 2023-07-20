@@ -23,6 +23,8 @@ public class LikeServiceImp implements LikeService {
     @Override
     public Like like(Long userId, Long eventId, int status) {
         Like like = Like.builder()
+                .userId(userId)
+                .eventId(eventId)
                 .user(getUser(userId))
                 .event(getEvent(eventId))
                 .status(status)

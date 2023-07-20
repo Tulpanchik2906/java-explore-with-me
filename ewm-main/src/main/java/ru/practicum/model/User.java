@@ -1,6 +1,7 @@
 package ru.practicum.model;
 
 import lombok.*;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -28,4 +29,10 @@ public class User implements Serializable {
 
     @Column(name = "email", unique = true)
     private String email;
+
+    @Transient
+    @Formula("(select count(l.user_id) " +
+            "from LIKES l " +
+            "where l.user_id = id AND status = 1)")
+    private double rating;
 }

@@ -209,6 +209,8 @@ public class EventServiceImpl implements EventService {
                 case EVENT_DATE:
                     sort = Sort.by("eventDate");
                     break;
+                case RATING:
+                    sort = Sort.by("rating");
             }
         }
 

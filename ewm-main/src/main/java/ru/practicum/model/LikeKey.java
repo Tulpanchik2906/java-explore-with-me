@@ -8,7 +8,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 public class LikeKey implements Serializable {
-    private User user;
+    private Long userId;
 
-    private Event event;
+    private Long eventId;
 }

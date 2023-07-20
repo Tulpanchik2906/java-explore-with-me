@@ -1,6 +1,7 @@
 package ru.practicum.model;
 
 import lombok.*;
+import org.hibernate.annotations.Formula;
 import ru.practicum.enums.EventState;
 
 import javax.persistence.*;
@@ -70,4 +71,10 @@ public class Event implements Serializable {
 
     @Column(name = "views")
     private Long views;
+
+    @Transient
+    @Formula("(select count(l.event_id) " +
+            "from LIKES l " +
+            "where l.event_id = id AND status = 1)")
+    private double rating;
 }
