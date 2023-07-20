@@ -3,6 +3,8 @@ package ru.practicum.model;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
@@ -22,6 +24,7 @@ public class Compilation implements Serializable {
     private Long id;
 
     @Column(name = "pinned")
+    @NotNull
     private Boolean pinned;
 
     @ManyToMany
@@ -32,6 +35,7 @@ public class Compilation implements Serializable {
     private List<Event> events;
 
     @Column(name = "title")
+    @NotBlank
     private String title;
 
 }

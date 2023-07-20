@@ -4,6 +4,7 @@ import lombok.*;
 import ru.practicum.enums.EventRequestStatus;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -22,6 +23,7 @@ public class EventRequest implements Serializable {
     private Long id;
 
     @Column(name = "created")
+    @NotNull
     private LocalDateTime created;
 
     @ManyToOne

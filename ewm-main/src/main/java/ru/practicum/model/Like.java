@@ -3,6 +3,7 @@ package ru.practicum.model;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Getter
@@ -34,5 +35,6 @@ public class Like implements Serializable {
     private Event event;
 
     @Column(name = "status")
+    @NotNull
     private Integer status;
 }

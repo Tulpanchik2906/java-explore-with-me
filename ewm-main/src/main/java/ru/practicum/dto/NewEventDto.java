@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class NewEventDto {
 
-    @NotNull
     @NotBlank
     @Length(min = 20, max = 2000)
     private String annotation;
@@ -26,7 +25,6 @@ public class NewEventDto {
     @NotNull
     private Long category;
 
-    @NotNull
     @NotBlank
     @Length(min = 20, max = 7000)
     private String description;
@@ -45,7 +43,6 @@ public class NewEventDto {
 
     private Boolean requestModeration = true;
 
-    @NotNull
     @NotBlank
     @Length(min = 3, max = 120)
     private String title;
