@@ -6,20 +6,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.*;
-import ru.practicum.enums.EventRequestStatus;
-import ru.practicum.mappers.*;
-import ru.practicum.servicies.logicservicies.EventRequestService;
-import ru.practicum.servicies.logicservicies.EventService;
-import ru.practicum.servicies.logicservicies.LikeService;
-import ru.practicum.servicies.params.CreateEventParam;
-import ru.practicum.servicies.params.CreateEventRequestParam;
-import ru.practicum.servicies.params.PatchEventParam;
+import ru.practicum.servicies.mapperservicies.forall.PublicUserMapperService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/users")
@@ -28,22 +20,18 @@ import java.util.stream.Collectors;
 @Validated
 public class PublicUserController {
 
-    private final EventService eventService;
-    private final EventRequestService eventRequestService;
-    private final LikeService likeService;
+    private final PublicUserMapperService publicUserMapperService;
 
 
     @GetMapping("/{userId}/events")
     public List<EventFullDto> getEvents(@PathVariable("userId") Long userId,
                                         @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
                                         @RequestParam(defaultValue = "10") @Positive Integer size) {
-        log.info("Получен запрос на поиск всех событий пользователя {}.",
-                userId);
+        log.info("Получен запрос на поиск всех событий пользователя с параметрами:" +
+                        "userId={}, from={}, size={}.",
+                userId, from, size);
 
-
-        return eventService.findAllByInitiatorId(userId, from, size).stream()
-                .map(ExtendEventMapper::toEventFullDto)
-                .collect(Collectors.toList());
+        return publicUserMapperService.getEvents(userId, from, size);
     }
 
     @GetMapping("/{userId}/events/{eventId}")
@@ -52,24 +40,24 @@ public class PublicUserController {
         log.info("Получен запрос на поиск события {} для иницатора {}.",
                 eventId, userId);
 
-        return ExtendEventMapper.toEventFullDto(
-                eventService.getEventByEventIdAndInitiatorId(eventId, userId));
+        return publicUserMapperService.getEventByEventIdAndInitiatorId(userId, eventId);
     }
 
     @GetMapping("/{userId}/requests")
     public List<ParticipationRequestDto> getRequestByAnotherEvents(@PathVariable Long userId) {
-        return eventRequestService.findAllByRequesterId(userId).stream()
-                .map(x -> EventRequestMapper.INSTANCE.toEventParticipationRequestDto(x))
-                .collect(Collectors.toList());
+        log.info("Получение информации о заявках пользователя c id: {} на участие в чужих событиях",
+                userId);
+
+        return publicUserMapperService.getRequestByAnotherEvents(userId);
     }
 
     @GetMapping("/{userId}/events/{eventId}/requests")
     public List<ParticipationRequestDto> getEventParticipants(
-            @PathVariable Long userId,
-            @PathVariable Long eventId) {
-        return eventRequestService.findAllByEventIdAndOwnerId(eventId, userId).stream()
-                .map(x -> EventRequestMapper.INSTANCE.toEventParticipationRequestDto(x))
-                .collect(Collectors.toList());
+            @PathVariable Long userId, @PathVariable Long eventId) {
+        log.info("Получение информации о запросах на участие в событии c id: {}" +
+                " пользователя c id:{}", eventId, userId);
+
+        return publicUserMapperService.getEventParticipants(userId, eventId);
     }
 
     @PostMapping("/{userId}/events")
@@ -77,17 +65,10 @@ public class PublicUserController {
     @ResponseStatus(HttpStatus.CREATED)
     public EventFullDto createEvent(@PathVariable("userId") Long userId,
                                     @Valid @RequestBody NewEventDto newEventDto) {
-        log.info("Получен запрос на создание события от пользователя {}.",
-                userId);
+        log.info("Получен запрос на создание события от пользователя {}, body = {}.",
+                userId, newEventDto.toString());
 
-        CreateEventParam createEventParam = CreateEventParam.builder()
-                .userId(userId)
-                .categoryId(newEventDto.getCategory())
-                .location(LocationMapper.INSTANCE.toLocation(newEventDto.getLocation()))
-                .build();
-
-        return ExtendEventMapper.toEventFullDto((eventService.create(
-                EventMapper.INSTANCE.toEvent(newEventDto), createEventParam)));
+        return publicUserMapperService.createEvent(userId, newEventDto);
     }
 
     @PostMapping("/{userId}/requests")
@@ -98,44 +79,29 @@ public class PublicUserController {
             @Valid @RequestParam(value = "eventId", required = true) Long eventId) {
         log.info("Получен запрос на участие в событии {} от пользователя {}.",
                 eventId, userId);
-        CreateEventRequestParam createEventRequestParam = CreateEventRequestParam.builder()
-                .userId(userId)
-                .eventId(eventId)
-                .build();
-        return EventRequestMapper.INSTANCE.toEventParticipationRequestDto(
-                eventRequestService.create(createEventRequestParam));
+
+        return publicUserMapperService.addParticipationRequest(userId, eventId);
     }
 
     @PatchMapping("/{userId}/events/{eventId}")
-    public EventFullDto updateEvent(@PathVariable("userId") Long userId,
-                                    @PathVariable("eventId") Long eventId,
-                                    @Valid @RequestBody UpdateEventUserRequest updateEventUserRequest) {
+    public EventFullDto updateEvent(
+            @PathVariable("userId") Long userId,
+            @PathVariable("eventId") Long eventId,
+            @Valid @RequestBody UpdateEventUserRequest updateEventUserRequest) {
 
-        log.info("Получен запрос на изменение события с id:{} от пользователя с id:{} ",
-                eventId, userId);
+        log.info("Получен запрос на изменение события с id:{} от пользователя с id:{}, body={}.",
+                eventId, userId, updateEventUserRequest.toString());
 
-        log.info(updateEventUserRequest.toString());
-
-        PatchEventParam patchEventParam = PatchEventParam.builder()
-                .eventId(eventId)
-                .userId(userId)
-                .eventState(EventStatusMapper.toEventStatus(
-                        updateEventUserRequest.getStateAction()))
-                .location(LocationMapper.INSTANCE.toLocation(
-                        updateEventUserRequest.getLocation()))
-                .build();
-
-        return ExtendEventMapper.toEventFullDto(
-                eventService.patchByUser(EventMapper.INSTANCE.toEvent(updateEventUserRequest),
-                        patchEventParam));
+        return publicUserMapperService.updateEvent(userId, eventId, updateEventUserRequest);
     }
 
     @PatchMapping("/{userId}/requests/{requestId}/cancel")
     public ParticipationRequestDto cancelRequest(@PathVariable("userId") Long userId,
                                                  @PathVariable("requestId") Long requestId) {
-        return EventRequestMapper.INSTANCE.toEventParticipationRequestDto(
-                eventRequestService.changeStatus(
-                        requestId, EventRequestStatus.CANCELED, userId));
+        log.info("Получен запрос на отмену участия в событии с параметрами: " +
+                "userId={}, requestId={}.", userId, requestId);
+
+        return publicUserMapperService.cancelRequest(userId, requestId);
     }
 
     @PatchMapping("/{userId}/events/{eventId}/requests")
@@ -143,13 +109,12 @@ public class PublicUserController {
             @PathVariable("userId") Long userId,
             @PathVariable("eventId") Long eventId,
             @Valid @RequestBody EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest) {
-        log.info("Получен запрос на изменение статуса запросов на участия на событие с id: " +
-                eventId + " от пользователя c id: " + userId);
+        log.info("Получен запрос на изменение статуса запросов на участия на событие с id: {} " +
+                        " от пользователя c id: {}, body={}. ", userId, eventId,
+                eventRequestStatusUpdateRequest);
 
-        log.info(eventRequestStatusUpdateRequest.toString());
-        return EventRequestStatusUpdateResultMapper.eventRequestStatusUpdateResultDto(
-                eventRequestService.changeStatusByEvent(
-                        eventRequestStatusUpdateRequest, eventId, userId));
+        return publicUserMapperService.changeRequestStatus(userId, eventId,
+                eventRequestStatusUpdateRequest);
     }
 
     @PutMapping("/{userId}/like/{eventId}")
@@ -160,8 +125,7 @@ public class PublicUserController {
         log.info("Получен запрос на лайк событию {} от пользователя {}.",
                 eventId, userId);
 
-        return LikeMapper.INSTANCE.toLikeDto(
-                likeService.like(userId, eventId, 1));
+        return publicUserMapperService.likeEvent(userId, eventId);
     }
 
     @PutMapping("/{userId}/dislike/{eventId}")
@@ -169,10 +133,9 @@ public class PublicUserController {
     public LikeDto disLikeEvent(
             @PathVariable("userId") Long userId,
             @PathVariable(value = "eventId") Long eventId) {
-        log.info("Получен запрос на лайк событию {} от пользователя {}.",
+        log.info("Получен запрос на дизлайк событию {} от пользователя {}.",
                 eventId, userId);
 
-        return LikeMapper.INSTANCE.toLikeDto(
-                likeService.like(userId, eventId, -1));
+        return publicUserMapperService.disLikeEvent(userId, eventId);
     }
 }

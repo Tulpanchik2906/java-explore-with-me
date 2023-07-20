@@ -1,4 +1,4 @@
-package ru.practicum.servicies.mapperservicies;
+package ru.practicum.servicies.mapperservicies.admin;
 
 import ru.practicum.dto.CompilationDto;
 import ru.practicum.dto.NewCompilationDto;

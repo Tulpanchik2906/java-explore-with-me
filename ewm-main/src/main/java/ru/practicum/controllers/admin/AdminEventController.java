@@ -6,7 +6,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.EventFullDto;
 import ru.practicum.dto.UpdateEventAdminRequest;
-import ru.practicum.servicies.mapperservicies.AdminEventMapperService;
+import ru.practicum.servicies.mapperservicies.admin.AdminEventMapperService;
 
 import javax.validation.Valid;
 import java.util.List;

@@ -5,22 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.EventFullDto;
-import ru.practicum.exception.ValidationException;
-import ru.practicum.mappers.EventMapper;
-import ru.practicum.mappers.ExtendEventMapper;
-import ru.practicum.servicies.logicservicies.EventService;
-import ru.practicum.servicies.logicservicies.StatsService;
-import ru.practicum.servicies.params.SearchEventParamForUser;
+import ru.practicum.servicies.mapperservicies.forall.PublicEventMapperService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
-import java.net.URLDecoder;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/events")
@@ -29,21 +20,13 @@ import java.util.stream.Collectors;
 @Validated
 public class PublicEventController {
 
-    private final EventService eventService;
-    private final EventMapper eventMapper;
-    private final String dateTimeFormat = "yyyy-MM-dd HH:mm:ss";
-    private final StatsService statsService;
+    private final PublicEventMapperService publicEventMapperService;
 
     @GetMapping("/{id}")
     public EventFullDto getEvent(@PathVariable("id") Long id, HttpServletRequest request) {
+        log.info("Получен запрос на получение данных о событии с id: {}.", id);
 
-        EventFullDto eventFullDto =
-                ExtendEventMapper.toEventFullDto(eventService.findPublicEvent(id));
-
-        statsService.saveStat(request);
-        eventService.saveNewView(id);
-
-        return eventFullDto;
+        return publicEventMapperService.getEvent(id, request);
     }
 
     @GetMapping
@@ -58,47 +41,13 @@ public class PublicEventController {
             @PositiveOrZero @RequestParam(value = "from", required = false, defaultValue = "0") Integer from,
             @Positive @RequestParam(value = "size", required = false, defaultValue = "10") Integer size,
             HttpServletRequest request) {
+        log.info("Получен публичный запрос на список событий со следующими параметрами:" +
+                        " text={}, categories={}, paid={}, rangeStart={}," +
+                        " rangeEnd={}, onlyAvailable={}, sort={}, from={}, size={}",
+                text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
 
-        LocalDateTime start = null;
-        LocalDateTime end = null;
-        if (rangeStart != null) {
-            start = LocalDateTime.parse(URLDecoder.decode(rangeStart),
-                    DateTimeFormatter.ofPattern(dateTimeFormat));
-        } else {
-            start = LocalDateTime.now();
-        }
-        if (rangeEnd != null) {
-            end = LocalDateTime.parse(URLDecoder.decode(rangeEnd),
-                    DateTimeFormatter.ofPattern(dateTimeFormat));
-        }
-
-        if (rangeEnd != null && rangeStart != null) {
-            if (end.isBefore(start)) {
-                throw new ValidationException(
-                        "Время начала не может быть раньше времени конца. ");
-            }
-        }
-
-        SearchEventParamForUser searchEventParamForUser = SearchEventParamForUser.builder()
-                .text(text)
-                .categories(categories)
-                .paid(paid)
-                .rangeStart(start)
-                .rangeEnd(end)
-                .onlyAvailable(onlyAvailable)
-                .sort(sort)
-                .isPublicRequest(true)
-                .from(from)
-                .size(size)
-                .build();
-
-        List<EventFullDto> res = eventService.findAllForUser(searchEventParamForUser).stream()
-                .map(ExtendEventMapper::toEventFullDto)
-                .collect(Collectors.toList());
-
-        statsService.saveStat(request);
-
-        return res;
+        return publicEventMapperService.getEvents(text, categories, paid, rangeStart,
+                rangeEnd, onlyAvailable, sort, from, size, request);
     }
 
 }

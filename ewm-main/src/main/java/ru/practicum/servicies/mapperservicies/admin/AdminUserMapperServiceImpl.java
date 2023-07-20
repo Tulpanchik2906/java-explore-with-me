@@ -1,4 +1,4 @@
-package ru.practicum.servicies.mapperservicies;
+package ru.practicum.servicies.mapperservicies.admin;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

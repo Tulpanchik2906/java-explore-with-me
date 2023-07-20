@@ -7,7 +7,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.CategoryDto;
 import ru.practicum.dto.NewCategoryDto;
-import ru.practicum.servicies.mapperservicies.AdminCategoryMapperService;
+import ru.practicum.servicies.mapperservicies.admin.AdminCategoryMapperService;
 
 import javax.validation.Valid;
 import java.util.List;

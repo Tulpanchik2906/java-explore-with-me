@@ -7,7 +7,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.NewUserRequest;
 import ru.practicum.dto.UserDto;
-import ru.practicum.servicies.mapperservicies.AdminUserMapperService;
+import ru.practicum.servicies.mapperservicies.admin.AdminUserMapperService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
