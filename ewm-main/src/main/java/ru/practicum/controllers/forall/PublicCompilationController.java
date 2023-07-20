@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.CompilationDto;
+import ru.practicum.servicies.mapperservicies.forall.PublicCompilationMapperService;
 
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
@@ -17,13 +18,13 @@ import java.util.List;
 @Validated
 public class PublicCompilationController {
 
-    private final PublicCompilationController publicCompilationController;
+    private final PublicCompilationMapperService publicCompilationMapperService;
 
     @GetMapping("/{compId}")
     public CompilationDto getCompilation(@PathVariable("compId") Long compId) {
         log.info("Получен запрос на получение подборки с compId: {}.", compId);
 
-        return publicCompilationController.getCompilation(compId);
+        return publicCompilationMapperService.getCompilation(compId);
     }
 
     @GetMapping
@@ -34,7 +35,7 @@ public class PublicCompilationController {
         log.info("Получен запрос на получение списка подборок с параметрами: " +
                 "pinned={}, from={}, size={}", pinned, from, size);
 
-        return publicCompilationController.getCompilations(pinned, from, size);
+        return publicCompilationMapperService.getCompilations(pinned, from, size);
     }
 
 }
