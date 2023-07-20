@@ -100,9 +100,6 @@ public class CompilationServiceImp implements CompilationService {
             oldCompilation.setPinned(compilation.getPinned());
         }
         if (compilation.getTitle() != null) {
-            if (compilation.getTitle().isBlank()) {
-                throw new ValidationException("Название подборки не может состоять только из пробелов");
-            }
             oldCompilation.setTitle(compilation.getTitle());
         }
         return compilationRepository.save(oldCompilation);

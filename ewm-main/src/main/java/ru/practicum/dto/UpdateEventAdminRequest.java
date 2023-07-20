@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+import ru.practicum.annotation.NotBlankWithNull;
 import ru.practicum.enums.StateAction;
 
 import javax.validation.constraints.Future;
@@ -18,11 +19,13 @@ import java.time.LocalDateTime;
 public class UpdateEventAdminRequest {
 
     @Length(min = 20, max = 2000)
+    @NotBlankWithNull
     private String annotation;
 
     private Long category;
 
     @Length(min = 20, max = 7000)
+    @NotBlankWithNull
     private String description;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -40,5 +43,6 @@ public class UpdateEventAdminRequest {
     private StateAction stateAction;
 
     @Length(min = 3, max = 120)
+    @NotBlankWithNull
     private String title;
 }

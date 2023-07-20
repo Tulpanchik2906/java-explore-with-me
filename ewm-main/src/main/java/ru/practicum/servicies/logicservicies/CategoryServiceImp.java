@@ -5,7 +5,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.exception.NotFoundException;
-import ru.practicum.exception.ValidationException;
 import ru.practicum.model.Category;
 import ru.practicum.storage.CategoryRepository;
 import ru.practicum.util.PageUtil;
@@ -30,9 +29,6 @@ public class CategoryServiceImp implements CategoryService {
     public Category update(Long categoryId, Category patchCategory) {
         Category oldCategory = get(categoryId);
         if (patchCategory.getName() != null) {
-            if (patchCategory.getName().isBlank()) {
-                throw new ValidationException("Поле имя не может состоять из одних пробелов.");
-            }
             oldCategory.setName(patchCategory.getName());
         }
         return categoryRepository.save(oldCategory);
