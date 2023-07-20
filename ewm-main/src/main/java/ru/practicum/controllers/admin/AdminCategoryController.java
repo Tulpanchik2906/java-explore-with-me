@@ -7,12 +7,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.CategoryDto;
 import ru.practicum.dto.NewCategoryDto;
-import ru.practicum.mappers.CategoryMapper;
-import ru.practicum.services.CategoryService;
+import ru.practicum.servicies.mapperservicies.AdminCategoryMapperService;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/admin/categories")
@@ -21,41 +19,41 @@ import java.util.stream.Collectors;
 @Validated
 public class AdminCategoryController {
 
-    private final CategoryService categoryService;
-
-    private final CategoryMapper categoryMapper;
+    private final AdminCategoryMapperService adminCategoryMapperService;
 
     @GetMapping
     @ResponseBody
     public List<CategoryDto> getCategories(
             @RequestParam(value = "from", required = false, defaultValue = "0") Integer from,
             @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
+        log.info("Получен запрос на просмотр списка категорий. " +
+                "Параметры запроса: from: {}, size: {}. ", from, size);
 
-        return categoryService.findAll(from, size).stream()
-                .map(category -> categoryMapper.toCategoryDto(category))
-                .collect(Collectors.toList());
+        return adminCategoryMapperService.getCategories(from, size);
     }
 
     @PostMapping
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
     public CategoryDto addCategory(@Valid @RequestBody NewCategoryDto newCategoryDto) {
-        return categoryMapper.toCategoryDto(categoryService.create(
-                categoryMapper.toCategory(newCategoryDto)));
+        log.info("Получен запрос на добавление новой категории: {} ",
+                newCategoryDto.toString());
+        return adminCategoryMapperService.addCategory(newCategoryDto);
     }
 
     @PatchMapping("/{id}")
     @ResponseBody
     public CategoryDto updateCategory(@PathVariable Long id,
                                       @Valid @RequestBody CategoryDto categoryDto) {
-        return categoryMapper.toCategoryDto(
-                categoryService.update(id, categoryMapper.toCategory(categoryDto)));
+        log.info("Получен запрос на изменение категории с id: {}, body = {} ",
+                id, categoryDto);
+        return adminCategoryMapperService.updateCategory(id, categoryDto);
     }
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
-        categoryService.delete(id);
+        log.info("Получен запрос на удаление категории с id {}", id);
+        adminCategoryMapperService.delete(id);
     }
-
 }

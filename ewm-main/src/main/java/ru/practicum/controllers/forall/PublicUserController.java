@@ -8,13 +8,12 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.*;
 import ru.practicum.enums.EventRequestStatus;
 import ru.practicum.mappers.*;
-import ru.practicum.model.Event;
-import ru.practicum.services.EventRequestService;
-import ru.practicum.services.EventService;
-import ru.practicum.services.LikeService;
-import ru.practicum.services.params.CreateEventParam;
-import ru.practicum.services.params.CreateEventRequestParam;
-import ru.practicum.services.params.PatchEventParam;
+import ru.practicum.servicies.logicservicies.EventRequestService;
+import ru.practicum.servicies.logicservicies.EventService;
+import ru.practicum.servicies.logicservicies.LikeService;
+import ru.practicum.servicies.params.CreateEventParam;
+import ru.practicum.servicies.params.CreateEventRequestParam;
+import ru.practicum.servicies.params.PatchEventParam;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -31,10 +30,6 @@ public class PublicUserController {
 
     private final EventService eventService;
     private final EventRequestService eventRequestService;
-    private final EventMapper eventMapper;
-    private final EventRequestMapper eventRequestMapper;
-    private final LocationMapper locationMapper;
-
     private final LikeService likeService;
 
 
@@ -47,7 +42,7 @@ public class PublicUserController {
 
 
         return eventService.findAllByInitiatorId(userId, from, size).stream()
-                .map(x -> ExtendEventMapper.eventFullDto(eventMapper.toEventFullDto(x), x))
+                .map(ExtendEventMapper::toEventFullDto)
                 .collect(Collectors.toList());
     }
 
@@ -57,17 +52,14 @@ public class PublicUserController {
         log.info("Получен запрос на поиск события {} для иницатора {}.",
                 eventId, userId);
 
-        Event eventRes = eventService.getEventByEventIdAndInitiatorId(eventId, userId);
-
-
-        return ExtendEventMapper.eventFullDto(
-                eventMapper.toEventFullDto(eventRes), eventRes);
+        return ExtendEventMapper.toEventFullDto(
+                eventService.getEventByEventIdAndInitiatorId(eventId, userId));
     }
 
     @GetMapping("/{userId}/requests")
     public List<ParticipationRequestDto> getRequestByAnotherEvents(@PathVariable Long userId) {
         return eventRequestService.findAllByRequesterId(userId).stream()
-                .map(x -> eventRequestMapper.toEventParticipationRequestDto(x))
+                .map(x -> EventRequestMapper.INSTANCE.toEventParticipationRequestDto(x))
                 .collect(Collectors.toList());
     }
 
@@ -76,7 +68,7 @@ public class PublicUserController {
             @PathVariable Long userId,
             @PathVariable Long eventId) {
         return eventRequestService.findAllByEventIdAndOwnerId(eventId, userId).stream()
-                .map(x -> eventRequestMapper.toEventParticipationRequestDto(x))
+                .map(x -> EventRequestMapper.INSTANCE.toEventParticipationRequestDto(x))
                 .collect(Collectors.toList());
     }
 
@@ -91,14 +83,11 @@ public class PublicUserController {
         CreateEventParam createEventParam = CreateEventParam.builder()
                 .userId(userId)
                 .categoryId(newEventDto.getCategory())
-                .location(locationMapper.toLocation(newEventDto.getLocation()))
+                .location(LocationMapper.INSTANCE.toLocation(newEventDto.getLocation()))
                 .build();
 
-        Event eventRes = eventService.create(
-                eventMapper.toEvent(newEventDto), createEventParam);
-
-        return ExtendEventMapper.eventFullDto(
-                eventMapper.toEventFullDto(eventRes), eventRes);
+        return ExtendEventMapper.toEventFullDto((eventService.create(
+                EventMapper.INSTANCE.toEvent(newEventDto), createEventParam)));
     }
 
     @PostMapping("/{userId}/requests")
@@ -113,7 +102,7 @@ public class PublicUserController {
                 .userId(userId)
                 .eventId(eventId)
                 .build();
-        return eventRequestMapper.toEventParticipationRequestDto(
+        return EventRequestMapper.INSTANCE.toEventParticipationRequestDto(
                 eventRequestService.create(createEventRequestParam));
     }
 
@@ -132,22 +121,19 @@ public class PublicUserController {
                 .userId(userId)
                 .eventState(EventStatusMapper.toEventStatus(
                         updateEventUserRequest.getStateAction()))
-                .location(locationMapper.toLocation(
+                .location(LocationMapper.INSTANCE.toLocation(
                         updateEventUserRequest.getLocation()))
                 .build();
 
-
-        Event eventRes = eventService.patchByUser(eventMapper.toEvent(updateEventUserRequest),
-                patchEventParam);
-
-        return ExtendEventMapper.eventFullDto(
-                eventMapper.toEventFullDto(eventRes), eventRes);
+        return ExtendEventMapper.toEventFullDto(
+                eventService.patchByUser(EventMapper.INSTANCE.toEvent(updateEventUserRequest),
+                        patchEventParam));
     }
 
     @PatchMapping("/{userId}/requests/{requestId}/cancel")
     public ParticipationRequestDto cancelRequest(@PathVariable("userId") Long userId,
                                                  @PathVariable("requestId") Long requestId) {
-        return eventRequestMapper.toEventParticipationRequestDto(
+        return EventRequestMapper.INSTANCE.toEventParticipationRequestDto(
                 eventRequestService.changeStatus(
                         requestId, EventRequestStatus.CANCELED, userId));
     }

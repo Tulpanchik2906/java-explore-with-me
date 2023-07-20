@@ -1,10 +1,10 @@
-package ru.practicum.services;
+package ru.practicum.servicies.logicservicies;
 
 import ru.practicum.model.Event;
-import ru.practicum.services.params.CreateEventParam;
-import ru.practicum.services.params.PatchEventParam;
-import ru.practicum.services.params.SearchEventParamForAdmin;
-import ru.practicum.services.params.SearchEventParamForUser;
+import ru.practicum.servicies.params.CreateEventParam;
+import ru.practicum.servicies.params.PatchEventParam;
+import ru.practicum.servicies.params.SearchEventParamForAdmin;
+import ru.practicum.servicies.params.SearchEventParamForUser;
 
 import java.util.List;
 

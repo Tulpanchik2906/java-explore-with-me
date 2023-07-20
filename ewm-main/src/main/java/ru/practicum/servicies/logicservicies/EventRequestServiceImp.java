@@ -1,4 +1,4 @@
-package ru.practicum.services;
+package ru.practicum.servicies.logicservicies;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,8 +12,8 @@ import ru.practicum.exception.NotFoundException;
 import ru.practicum.model.Event;
 import ru.practicum.model.EventRequest;
 import ru.practicum.model.User;
-import ru.practicum.services.params.CreateEventRequestParam;
-import ru.practicum.services.params.EventRequestStatusUpdateResult;
+import ru.practicum.servicies.params.CreateEventRequestParam;
+import ru.practicum.servicies.params.EventRequestStatusUpdateResult;
 import ru.practicum.storage.EventRepository;
 import ru.practicum.storage.EventRequestRepository;
 import ru.practicum.storage.UserRepository;

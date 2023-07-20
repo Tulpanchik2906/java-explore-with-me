@@ -1,4 +1,4 @@
-package ru.practicum.services;
+package ru.practicum.servicies.logicservicies;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
@@ -15,10 +15,10 @@ import ru.practicum.enums.EventState;
 import ru.practicum.exception.NotAvailableException;
 import ru.practicum.exception.NotFoundException;
 import ru.practicum.model.*;
-import ru.practicum.services.params.CreateEventParam;
-import ru.practicum.services.params.PatchEventParam;
-import ru.practicum.services.params.SearchEventParamForAdmin;
-import ru.practicum.services.params.SearchEventParamForUser;
+import ru.practicum.servicies.params.CreateEventParam;
+import ru.practicum.servicies.params.PatchEventParam;
+import ru.practicum.servicies.params.SearchEventParamForAdmin;
+import ru.practicum.servicies.params.SearchEventParamForUser;
 import ru.practicum.storage.CategoryRepository;
 import ru.practicum.storage.EventRepository;
 import ru.practicum.storage.EventRequestRepository;

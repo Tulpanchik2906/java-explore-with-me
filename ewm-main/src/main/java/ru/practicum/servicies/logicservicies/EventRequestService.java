@@ -1,10 +1,10 @@
-package ru.practicum.services;
+package ru.practicum.servicies.logicservicies;
 
 import ru.practicum.dto.EventRequestStatusUpdateRequest;
 import ru.practicum.enums.EventRequestStatus;
 import ru.practicum.model.EventRequest;
-import ru.practicum.services.params.CreateEventRequestParam;
-import ru.practicum.services.params.EventRequestStatusUpdateResult;
+import ru.practicum.servicies.params.CreateEventRequestParam;
+import ru.practicum.servicies.params.EventRequestStatusUpdateResult;
 
 import java.util.List;
 

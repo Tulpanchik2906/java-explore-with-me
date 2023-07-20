@@ -8,9 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.CompilationDto;
 import ru.practicum.dto.NewCompilationDto;
 import ru.practicum.dto.UpdateCompilationRequest;
-import ru.practicum.mappers.CompilationMapper;
-import ru.practicum.mappers.ExtendCompilationMapper;
-import ru.practicum.services.CompilationService;
+import ru.practicum.servicies.mapperservicies.AdminCompilationMapperService;
 
 import javax.validation.Valid;
 
@@ -21,32 +19,29 @@ import javax.validation.Valid;
 @Validated
 public class AdminCompilationController {
 
-    private final CompilationService compilationService;
-
-    private final CompilationMapper compilationMapper;
+    private final AdminCompilationMapperService adminCompilationMapperService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CompilationDto saveCompilation(
             @Valid @RequestBody NewCompilationDto newCompilationDto) {
-        return ExtendCompilationMapper.toCompilationDto(
-                compilationService.create(
-                        compilationMapper.toCompilation(newCompilationDto),
-                        newCompilationDto.getEvents()));
+        log.info("Получен запрос на сохранение новой подборки, body={}",
+                newCompilationDto.toString());
+        return adminCompilationMapperService.saveCompilation(newCompilationDto);
     }
 
     @PatchMapping("/{compId}")
     public CompilationDto updateCompilation(@PathVariable("compId") Long compId,
                                             @Valid @RequestBody UpdateCompilationRequest updateCompilationRequest) {
-        return ExtendCompilationMapper.toCompilationDto(
-                compilationService.update(compId,
-                        compilationMapper.toCompilation(updateCompilationRequest),
-                        updateCompilationRequest.getEvents()));
+        log.info("Получен запрос на изменение подборки, compId = {}, body={}", compId,
+                updateCompilationRequest.toString());
+        return adminCompilationMapperService.updateCompilation(compId, updateCompilationRequest);
     }
 
     @DeleteMapping("/{compId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCompilation(@PathVariable("compId") Long compId) {
-        compilationService.delete(compId);
+        log.info("Получен запрос на удаление подборки с id: {}", compId);
+        adminCompilationMapperService.deleteCompilation(compId);
     }
 }

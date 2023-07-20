@@ -8,10 +8,9 @@ import ru.practicum.dto.EventFullDto;
 import ru.practicum.exception.ValidationException;
 import ru.practicum.mappers.EventMapper;
 import ru.practicum.mappers.ExtendEventMapper;
-import ru.practicum.model.Event;
-import ru.practicum.services.EventService;
-import ru.practicum.services.StatsService;
-import ru.practicum.services.params.SearchEventParamForUser;
+import ru.practicum.servicies.logicservicies.EventService;
+import ru.practicum.servicies.logicservicies.StatsService;
+import ru.practicum.servicies.params.SearchEventParamForUser;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Positive;
@@ -38,10 +37,8 @@ public class PublicEventController {
     @GetMapping("/{id}")
     public EventFullDto getEvent(@PathVariable("id") Long id, HttpServletRequest request) {
 
-        Event eventRes = eventService.findPublicEvent(id);
-
-        EventFullDto eventFullDto = ExtendEventMapper.eventFullDto(
-                eventMapper.toEventFullDto(eventRes), eventRes);
+        EventFullDto eventFullDto =
+                ExtendEventMapper.toEventFullDto(eventService.findPublicEvent(id));
 
         statsService.saveStat(request);
         eventService.saveNewView(id);
@@ -96,8 +93,7 @@ public class PublicEventController {
                 .build();
 
         List<EventFullDto> res = eventService.findAllForUser(searchEventParamForUser).stream()
-                .map(x -> ExtendEventMapper.eventFullDto(
-                        eventMapper.toEventFullDto(x), x))
+                .map(ExtendEventMapper::toEventFullDto)
                 .collect(Collectors.toList());
 
         statsService.saveStat(request);

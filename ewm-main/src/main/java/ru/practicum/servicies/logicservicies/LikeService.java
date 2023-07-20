@@ -1,4 +1,4 @@
-package ru.practicum.services;
+package ru.practicum.servicies.logicservicies;
 
 import ru.practicum.model.Like;
 

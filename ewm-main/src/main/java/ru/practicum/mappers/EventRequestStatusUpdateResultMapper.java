@@ -1,7 +1,7 @@
 package ru.practicum.mappers;
 
 import ru.practicum.dto.EventRequestStatusUpdateResultDto;
-import ru.practicum.services.params.EventRequestStatusUpdateResult;
+import ru.practicum.servicies.params.EventRequestStatusUpdateResult;
 
 import java.util.stream.Collectors;
 
