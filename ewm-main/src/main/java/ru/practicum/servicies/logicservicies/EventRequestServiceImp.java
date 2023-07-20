@@ -33,18 +33,20 @@ public class EventRequestServiceImp implements EventRequestService {
     private final EventRepository eventRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public List<EventRequest> findAllByEventIdAndOwnerId(
             Long eventId, Long userId) {
-
         return eventRequestRepository.findByEventIdAndEventInitiatorId(eventId, userId);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<EventRequest> findAllByRequesterId(Long userId) {
         return eventRequestRepository.findByRequesterId(userId);
     }
 
     @Override
+    @Transactional
     public EventRequest create(CreateEventRequestParam param) {
         User requester = getUser(param.userId);
 
@@ -65,6 +67,7 @@ public class EventRequestServiceImp implements EventRequestService {
                             " уже подавал заявку на событие с id: " +
                             param.eventId);
         }
+
         //Проверка, что на мероприятии еще есть места
         if (event.getParticipantLimit() != 0 && eventRequestRepository.countByEventIdAndStatus(
                 event.getId(), EventRequestStatus.CONFIRMED) >= event.getParticipantLimit()) {
@@ -95,6 +98,7 @@ public class EventRequestServiceImp implements EventRequestService {
     }
 
     @Override
+    @Transactional
     public EventRequest changeStatus(Long eventRequestId,
                                      EventRequestStatus eventRequestStatus,
                                      Long userId) {

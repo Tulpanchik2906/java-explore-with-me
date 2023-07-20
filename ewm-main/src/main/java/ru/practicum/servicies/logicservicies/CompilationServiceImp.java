@@ -4,6 +4,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.exception.NotFoundException;
 import ru.practicum.exception.ValidationException;
 import ru.practicum.model.Compilation;
@@ -26,22 +27,20 @@ public class CompilationServiceImp implements CompilationService {
     private final EventRepository eventRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public List<Compilation> findAll(Boolean pinned, int from, int size) {
         if (pinned != null) {
             BooleanExpression byPinned = QCompilation.compilation.pinned.eq(pinned);
-            // Получить номер страницы, с которой взять данные
             int startPage = PageUtil.getStartPage(from, size);
 
             if (PageUtil.isTwoSite(from, size)) {
-                // Получить данные с первой страницы
                 List<Compilation> list = compilationRepository
                         .findAll(byPinned, PageRequest.of(startPage, size)).stream()
                         .collect(Collectors.toList());
-                // Получить данные со второй страницы
+
                 list.addAll(compilationRepository.findAll(byPinned, PageRequest.of(startPage + 1, size))
                         .stream().collect(Collectors.toList()));
-                // Отсечь лишние данные сверху удалением из листа до нужного id,
-                // а потом сделать отсечение через функцию limit
+
                 return PageUtil.getPageListForTwoPage(list,
                         PageUtil.getStartFrom(from, size), size);
             } else {
@@ -50,16 +49,14 @@ public class CompilationServiceImp implements CompilationService {
                         .collect(Collectors.toList());
             }
         } else {
-            // Получить номер страницы, с которой взять данные
             int startPage = PageUtil.getStartPage(from, size);
 
             if (PageUtil.isTwoSite(from, size)) {
-                // Получить данные с первой страницы
-                List<Compilation> list = (List) compilationRepository.findAll(PageRequest.of(startPage, size));
-                // Получить данные со второй страницы
-                list.addAll((List) compilationRepository.findAll(PageRequest.of(startPage + 1, size)));
-                // Отсечь лишние данные сверху удалением из листа до нужного id,
-                // а потом сделать отсечение через функцию limit
+                List<Compilation> list = (compilationRepository.findAll(PageRequest.of(startPage, size))
+                        .stream().collect(Collectors.toList()));
+                list.addAll(compilationRepository.findAll(PageRequest.of(startPage + 1, size))
+                        .stream().collect(Collectors.toList()));
+
                 return PageUtil.getPageListForTwoPage(list,
                         PageUtil.getStartFrom(from, size), size);
             } else {
@@ -71,12 +68,14 @@ public class CompilationServiceImp implements CompilationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Compilation get(Long id) {
         return compilationRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("Подборка с id: {} не найдена."));
     }
 
     @Override
+    @Transactional
     public Compilation create(Compilation compilation, Set<Long> eventIds) {
         if (eventIds != null) {
             List<Event> events = eventRepository.findByIdIn(new ArrayList<>(eventIds));
@@ -89,6 +88,7 @@ public class CompilationServiceImp implements CompilationService {
     }
 
     @Override
+    @Transactional
     public Compilation update(Long compId, Compilation compilation,
                               Set<Long> eventIds) {
         Compilation oldCompilation = get(compId);
@@ -109,6 +109,7 @@ public class CompilationServiceImp implements CompilationService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         get(id);
         compilationRepository.deleteById(id);

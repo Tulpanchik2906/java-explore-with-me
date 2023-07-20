@@ -20,11 +20,13 @@ public class CategoryServiceImp implements CategoryService {
     private final CategoryRepository categoryRepository;
 
     @Override
+    @Transactional
     public Category create(Category category) {
         return categoryRepository.save(category);
     }
 
     @Override
+    @Transactional
     public Category update(Long categoryId, Category patchCategory) {
         Category oldCategory = get(categoryId);
         if (patchCategory.getName() != null) {
@@ -37,6 +39,7 @@ public class CategoryServiceImp implements CategoryService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Category get(Long id) {
         return categoryRepository.findById(id).orElseThrow(
                 () -> new NotFoundException(
@@ -44,29 +47,21 @@ public class CategoryServiceImp implements CategoryService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Category> findAll(Integer from, Integer size) {
-        if (from == null && size == null) {
-            return categoryRepository.findAll();
-        } else if (from == null || size == null) {
-            throw new ValidationException("Не хватает параметров для формирования списка");
-        } else {
-            // Получить номер страницы, с которой взять данные
-            int startPage = PageUtil.getStartPage(from, size);
+        int startPage = PageUtil.getStartPage(from, size);
 
-            if (PageUtil.isTwoSite(from, size)) {
-                // Получить данные с первой страницы
-                List<Category> list = (List) categoryRepository.findAll(PageRequest.of(startPage, size));
-                // Получить данные со второй страницы
-                list.addAll((List) categoryRepository.findAll(PageRequest.of(startPage + 1, size)));
-                // Отсечь лишние данные сверху удалением из листа до нужного id,
-                // а потом сделать отсечение через функцию limit
-                return PageUtil.getPageListForTwoPage(list,
-                        PageUtil.getStartFrom(from, size), size);
-            } else {
-                return categoryRepository.findAll(PageRequest.of(startPage, size))
-                        .stream().limit(size)
-                        .collect(Collectors.toList());
-            }
+        if (PageUtil.isTwoSite(from, size)) {
+            List<Category> list = categoryRepository.findAll(PageRequest.of(startPage, size))
+                    .stream().collect(Collectors.toList());
+            list.addAll(categoryRepository.findAll(PageRequest.of(startPage + 1, size))
+                    .stream().collect(Collectors.toList()));
+            return PageUtil.getPageListForTwoPage(list,
+                    PageUtil.getStartFrom(from, size), size);
+        } else {
+            return categoryRepository.findAll(PageRequest.of(startPage, size))
+                    .stream().limit(size)
+                    .collect(Collectors.toList());
         }
     }
 
