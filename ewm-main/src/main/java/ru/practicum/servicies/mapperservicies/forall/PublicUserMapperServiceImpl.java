@@ -2,7 +2,7 @@ package ru.practicum.servicies.mapperservicies.forall;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.*;
+import ru.practicum.dto.*;
 import ru.practicum.enums.EventRequestStatus;
 import ru.practicum.mappers.*;
 import ru.practicum.servicies.logicservicies.EventRequestService;

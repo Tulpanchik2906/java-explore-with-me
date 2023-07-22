@@ -3,7 +3,7 @@ package ru.practicum.mappers;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.factory.Mappers;
-import ru.practicum.LocationDto;
+import ru.practicum.dto.LocationDto;
 import ru.practicum.model.Location;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)

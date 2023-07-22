@@ -3,9 +3,9 @@ package ru.practicum.mappers;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.factory.Mappers;
-import ru.practicum.NewUserRequest;
-import ru.practicum.UserDto;
-import ru.practicum.UserShortDto;
+import ru.practicum.dto.NewUserRequest;
+import ru.practicum.dto.UserDto;
+import ru.practicum.dto.UserShortDto;
 import ru.practicum.model.User;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)

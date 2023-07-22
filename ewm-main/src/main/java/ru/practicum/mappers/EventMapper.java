@@ -4,10 +4,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.factory.Mappers;
-import ru.practicum.EventFullDto;
-import ru.practicum.NewEventDto;
-import ru.practicum.UpdateEventAdminRequest;
-import ru.practicum.UpdateEventUserRequest;
+import ru.practicum.dto.EventFullDto;
+import ru.practicum.dto.NewEventDto;
+import ru.practicum.dto.UpdateEventAdminRequest;
+import ru.practicum.dto.UpdateEventUserRequest;
 import ru.practicum.model.Event;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)

@@ -1,8 +1,8 @@
 package ru.practicum.servicies.mapperservicies.admin;
 
-import ru.practicum.CompilationDto;
-import ru.practicum.NewCompilationDto;
-import ru.practicum.UpdateCompilationRequest;
+import ru.practicum.dto.CompilationDto;
+import ru.practicum.dto.NewCompilationDto;
+import ru.practicum.dto.UpdateCompilationRequest;
 
 public interface AdminCompilationMapperService {
 

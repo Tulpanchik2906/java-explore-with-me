@@ -3,7 +3,7 @@ package ru.practicum.servicies.logicservicies;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.EventRequestStatusUpdateRequest;
+import ru.practicum.dto.EventRequestStatusUpdateRequest;
 import ru.practicum.enums.EventRequestStatus;
 import ru.practicum.enums.EventState;
 import ru.practicum.exception.DuplicateException;

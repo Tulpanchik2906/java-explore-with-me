@@ -1,4 +1,4 @@
-package ru.practicum;
+package ru.practicum.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class UpdateEventAdminRequest {
+public class UpdateEventUserRequest {
 
     @Length(min = 20, max = 2000)
     @NotBlankWithNull
@@ -46,4 +46,5 @@ public class UpdateEventAdminRequest {
     @Length(min = 3, max = 120)
     @NotBlankWithNull
     private String title;
+
 }

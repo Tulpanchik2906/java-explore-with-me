@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.CompilationDto;
+import ru.practicum.dto.CompilationDto;
 import ru.practicum.servicies.mapperservicies.forall.PublicCompilationMapperService;
 
 import javax.validation.constraints.Positive;

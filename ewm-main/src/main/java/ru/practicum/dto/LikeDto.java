@@ -1,4 +1,4 @@
-package ru.practicum;
+package ru.practicum.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,12 @@ import lombok.RequiredArgsConstructor;
 @Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class LocationDto {
-    private Float lat;
-    private Float lon;
+public class LikeDto {
+
+    private Long userId;
+
+    private Long eventId;
+
+    private Integer status;
 
 }

@@ -2,8 +2,8 @@ package ru.practicum.servicies.mapperservicies.admin;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.CategoryDto;
-import ru.practicum.NewCategoryDto;
+import ru.practicum.dto.CategoryDto;
+import ru.practicum.dto.NewCategoryDto;
 import ru.practicum.mappers.CategoryMapper;
 import ru.practicum.servicies.logicservicies.CategoryService;
 

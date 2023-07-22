@@ -31,7 +31,6 @@ import ru.practicum.util.PageUtil;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -378,83 +377,49 @@ public class EventServiceImpl implements EventService {
             SearchEventParamForUser searchEventParamForUser, BooleanExpression query, Sort sort) {
         int startPage = PageUtil.getStartPage(
                 searchEventParamForUser.getFrom(), searchEventParamForUser.getSize());
-        List<Event> res = null;
-        if (query != null) {
+        List<Event> list = null;
+        if (query != null && sort != null) {
+            list = findAllWithQueryAndSort(
+                    startPage, searchEventParamForUser.getSize(), query, sort);
+
             if (PageUtil.isTwoSite(searchEventParamForUser.getFrom(), searchEventParamForUser.getSize())) {
-                List<Event> list;
-                if (sort != null) {
-                    list = eventRepository
-                            .findAll(query,
-                                    PageRequest.of(startPage, searchEventParamForUser.getSize(), sort)).stream()
-                            .collect(Collectors.toList());
-
-                    list.addAll(eventRepository.findAll(query,
-                                    PageRequest.of(startPage + 1, searchEventParamForUser.getSize(), sort))
-                            .stream().collect(Collectors.toList()));
-                } else {
-                    list = eventRepository
-                            .findAll(query, PageRequest.of(startPage, searchEventParamForUser.getSize())).stream()
-                            .collect(Collectors.toList());
-
-                    list.addAll(eventRepository.findAll(query,
-                                    PageRequest.of(startPage + 1, searchEventParamForUser.getSize()))
-                            .stream().collect(Collectors.toList()));
-                }
-
-                res = new ArrayList<>(PageUtil.getPageListByPage(list,
-                        PageUtil.getStartFrom(searchEventParamForUser.getFrom(),
-                                searchEventParamForUser.getSize()), searchEventParamForUser.getSize()));
-            } else {
-                if (sort != null) {
-                    res = new ArrayList<>(eventRepository.findAll(query, PageRequest.of(
-                                    startPage, searchEventParamForUser.getSize(), sort))
-                            .stream().limit(searchEventParamForUser.getSize())
-                            .collect(Collectors.toList()));
-                } else {
-                    res = new ArrayList<>(eventRepository.findAll(query, PageRequest.of(startPage, searchEventParamForUser.getSize()))
-                            .stream().limit(searchEventParamForUser.getSize())
-                            .collect(Collectors.toList()));
-                }
-            }
-        } else {
-            if (sort != null) {
-                List<Event> list;
-                if (PageUtil.isTwoSite(searchEventParamForUser.getFrom(),
-                        searchEventParamForUser.getSize())) {
-
-                    list = eventRepository.findAll(
-                                    PageRequest.of(startPage, searchEventParamForUser.getSize(), sort))
-                            .stream().collect(Collectors.toList());
-
-                    list.addAll(eventRepository.findAll(
-                                    PageRequest.of(startPage + 1, searchEventParamForUser.getSize(), sort))
-                            .stream().collect(Collectors.toList()));
-                } else {
-                    list = eventRepository.findAll(
-                                    PageRequest.of(startPage, searchEventParamForUser.getSize()))
-                            .stream().collect(Collectors.toList());
-                    list.addAll(eventRepository.findAll(
-                                    PageRequest.of(startPage + 1, searchEventParamForUser.getSize()))
-                            .stream().collect(Collectors.toList()));
-                }
-                res = new ArrayList<>(PageUtil.getPageListByPage(list,
-                        PageUtil.getStartFrom(searchEventParamForUser.getFrom(),
-                                searchEventParamForUser.getSize()), searchEventParamForUser.getSize()));
-            } else {
-                if (sort != null) {
-                    res = new ArrayList<>(eventRepository.findAll(
-                                    PageRequest.of(startPage, searchEventParamForUser.getSize(), sort))
-                            .stream().limit(searchEventParamForUser.getSize())
-                            .collect(Collectors.toList()));
-                } else {
-                    res = new ArrayList<>(eventRepository.findAll(
-                                    PageRequest.of(startPage, searchEventParamForUser.getSize()))
-                            .stream().limit(searchEventParamForUser.getSize())
-                            .collect(Collectors.toList()));
-                }
+                list.addAll(findAllWithQueryAndSort(
+                        startPage + 1, searchEventParamForUser.getSize(), query, sort));
             }
         }
-        return res;
+
+        if (query != null && sort == null) {
+            list = findAllWithQueryAndWithOutSort(
+                    startPage, searchEventParamForUser.getSize(), query);
+
+            if (PageUtil.isTwoSite(searchEventParamForUser.getFrom(), searchEventParamForUser.getSize())) {
+                list.addAll(findAllWithQueryAndWithOutSort(
+                        startPage + 1, searchEventParamForUser.getSize(), query));
+            }
+        }
+
+        if (query == null && sort != null) {
+            list = findAllWithSortAndWithOutQuery(
+                    startPage, searchEventParamForUser.getSize(), sort);
+
+            if (PageUtil.isTwoSite(searchEventParamForUser.getFrom(), searchEventParamForUser.getSize())) {
+                list.addAll(findAllWithSortAndWithOutQuery(
+                        startPage + 1, searchEventParamForUser.getSize(), sort));
+            }
+        }
+
+        if (query == null && sort == null) {
+            list = findAllWithOutQueryAndSort(startPage, searchEventParamForUser.getSize());
+
+            if (PageUtil.isTwoSite(searchEventParamForUser.getFrom(), searchEventParamForUser.getSize())) {
+                list.addAll(findAllWithOutQueryAndSort(
+                        startPage + 1, searchEventParamForUser.getSize()));
+            }
+        }
+
+        return PageUtil.getPageListByPage(list,
+                PageUtil.getStartFrom(searchEventParamForUser.getFrom(),
+                        searchEventParamForUser.getSize()), searchEventParamForUser.getSize());
     }
 
     private List<Event> getListForAdmin(
@@ -462,45 +427,48 @@ public class EventServiceImpl implements EventService {
 
         int startPage = PageUtil.getStartPage(
                 searchEventParamForAdmin.getFrom(), searchEventParamForAdmin.getSize());
+        List<Event> list;
         if (query != null) {
-            if (PageUtil.isTwoSite(searchEventParamForAdmin.getFrom(), searchEventParamForAdmin.getSize())) {
+            list = findAllWithQueryAndWithOutSort(startPage, searchEventParamForAdmin.getSize(), query);
 
-                List<Event> list = eventRepository
-                        .findAll(query, PageRequest.of(startPage, searchEventParamForAdmin.getSize())).stream()
-                        .collect(Collectors.toList());
-
-                list.addAll(eventRepository.findAll(query,
-                                PageRequest.of(startPage + 1, searchEventParamForAdmin.getSize()))
-                        .stream().collect(Collectors.toList()));
-
-                return PageUtil.getPageListByPage(list,
-                        PageUtil.getStartFrom(searchEventParamForAdmin.getFrom(),
-                                searchEventParamForAdmin.getSize()), searchEventParamForAdmin.getSize());
-            } else {
-                return eventRepository.findAll(query, PageRequest.of(startPage, searchEventParamForAdmin.getSize()))
-                        .stream().limit(searchEventParamForAdmin.getSize())
-                        .collect(Collectors.toList());
-            }
-        } else {
             if (PageUtil.isTwoSite(searchEventParamForAdmin.getFrom(),
                     searchEventParamForAdmin.getSize())) {
-                List<Event> list = eventRepository.findAll(
-                                PageRequest.of(startPage, searchEventParamForAdmin.getSize()))
-                        .stream().collect(Collectors.toList());
-                list.addAll(eventRepository.findAll(
-                                PageRequest.of(startPage + 1, searchEventParamForAdmin.getSize()))
-                        .stream().collect(Collectors.toList()));
+                list.addAll(findAllWithQueryAndWithOutSort(
+                        startPage + 1, searchEventParamForAdmin.getSize(), query));
+            }
+        } else {
+            list = findAllWithOutQueryAndSort(startPage, searchEventParamForAdmin.getSize());
 
-                return PageUtil.getPageListByPage(list,
-                        PageUtil.getStartFrom(searchEventParamForAdmin.getFrom(),
-                                searchEventParamForAdmin.getSize()), searchEventParamForAdmin.getSize());
-            } else {
-                return eventRepository.findAll(
-                                PageRequest.of(startPage, searchEventParamForAdmin.getSize()))
-                        .stream().limit(searchEventParamForAdmin.getSize())
-                        .collect(Collectors.toList());
+            if (PageUtil.isTwoSite(searchEventParamForAdmin.getFrom(),
+                    searchEventParamForAdmin.getSize())) {
+                list.addAll(findAllWithOutQueryAndSort(
+                        startPage + 1, searchEventParamForAdmin.getSize()));
             }
         }
+        return PageUtil.getPageListByPage(list,
+                PageUtil.getStartFrom(searchEventParamForAdmin.getFrom(),
+                        searchEventParamForAdmin.getSize()), searchEventParamForAdmin.getSize());
+    }
+
+    private List<Event> findAllWithOutQueryAndSort(int startPage, int size) {
+        return eventRepository.findAll(PageRequest.of(startPage, size)).stream()
+                .collect(Collectors.toList());
+    }
+
+    private List<Event> findAllWithQueryAndWithOutSort(int startPage, int size, BooleanExpression query) {
+        return eventRepository.findAll(query, PageRequest.of(startPage, size)).stream()
+                .collect(Collectors.toList());
+    }
+
+    private List<Event> findAllWithSortAndWithOutQuery(int startPage, int size, Sort sort) {
+        return eventRepository.findAll(PageRequest.of(startPage, size, sort)).stream()
+                .collect(Collectors.toList());
+    }
+
+    private List<Event> findAllWithQueryAndSort(
+            int startPage, int size, BooleanExpression query, Sort sort) {
+        return eventRepository.findAll(PageRequest.of(startPage, size, sort)).stream()
+                .collect(Collectors.toList());
     }
 }
 

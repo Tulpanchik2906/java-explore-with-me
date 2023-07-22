@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.factory.Mappers;
-import ru.practicum.LikeDto;
+import ru.practicum.dto.LikeDto;
 import ru.practicum.model.Like;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)

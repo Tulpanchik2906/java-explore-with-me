@@ -2,8 +2,8 @@ package ru.practicum.servicies.mapperservicies.admin;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.EventFullDto;
-import ru.practicum.UpdateEventAdminRequest;
+import ru.practicum.dto.EventFullDto;
+import ru.practicum.dto.UpdateEventAdminRequest;
 import ru.practicum.enums.EventState;
 import ru.practicum.exception.ValidationException;
 import ru.practicum.mappers.EventMapper;

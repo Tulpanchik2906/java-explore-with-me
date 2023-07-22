@@ -1,16 +1,19 @@
-package ru.practicum;
+package ru.practicum.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class UserShortDto {
+public class CompilationDto {
+    private List<EventFullDto> events;
     private Long id;
-    private String name;
-    private double rating;
+    private Boolean pinned;
+    private String title;
 }

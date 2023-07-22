@@ -2,7 +2,7 @@ package ru.practicum.servicies.mapperservicies.forall;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.EventFullDto;
+import ru.practicum.dto.EventFullDto;
 import ru.practicum.exception.ValidationException;
 import ru.practicum.mappers.ExtendEventMapper;
 import ru.practicum.servicies.logicservicies.EventService;
