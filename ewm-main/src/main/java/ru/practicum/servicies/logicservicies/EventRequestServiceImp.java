@@ -185,4 +185,48 @@ public class EventRequestServiceImp implements EventRequestService {
                                 " для события c id: " + eventId));
     }
 
+    private List<EventRequest> getConfirmedRequestsForSave(
+            List<Long> eventRequestIds, Long eventId, Long userId,
+            EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest,
+            Long maxConfirmed, Long cntParticipant) {
+
+        List<EventRequest> confirmRequests = new ArrayList<>();
+
+        for (int i = 0; i < eventRequestIds.size(); i++) {
+            EventRequest eventRequest = getEventRequest(eventRequestIds.get(i), eventId, userId);
+            if (maxConfirmed == 0 || cntParticipant < maxConfirmed) {
+                // Если заявка еще не подтверждалась
+                if (eventRequest.getStatus() != EventRequestStatus.CONFIRMED) {
+                    eventRequest.setStatus(EventRequestStatus.CONFIRMED);
+                    confirmRequests.add(eventRequest);
+                    cntParticipant++;
+                }
+            } else {
+                throw new NotAvailableException("Превышен лимит мест в событии с id: " + eventId);
+            }
+            eventRequestRepository.save(eventRequest);
+        }
+
+        return confirmRequests;
+    }
+
+    private List<EventRequest> getRejectedRequestsForSave(
+            List<Long> eventRequestIds, Long eventId, Long userId,
+            EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest,
+            Long maxConfirmed, Long cntParticipant) {
+
+        List<EventRequest> rejectRequests = new ArrayList<>();
+
+        for (int i = 0; i < eventRequestIds.size(); i++) {
+            EventRequest eventRequest = getEventRequest(eventRequestIds.get(i), eventId, userId);
+
+            if (eventRequest.getStatus() == EventRequestStatus.CONFIRMED) {
+                throw new NotAvailableException("Нельзя отклонить заявку, так как она уже одобрена.");
+            }
+            eventRequest.setStatus(eventRequestStatusUpdateRequest.getStatus());
+            rejectRequests.add(eventRequest);
+            eventRequestRepository.save(eventRequest);
+        }
+        return rejectRequests;
+    }
 }
