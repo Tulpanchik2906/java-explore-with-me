@@ -113,47 +113,27 @@ public class EventRequestServiceImp implements EventRequestService {
     public EventRequestStatusUpdateResult changeStatusByEvent(
             EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest, Long eventId,
             Long userId) {
-        List<Long> eventRequestIds = eventRequestStatusUpdateRequest.getRequestIds();
         List<EventRequest> confirmRequests = new ArrayList<>();
         List<EventRequest> rejectRequests = new ArrayList<>();
-        Optional<Event> event = eventRepository.findById(eventId);
+        Event event = getEvent(eventId);
 
-        if (event.isEmpty()) {
-            throw new NotFoundException("Событие с id: " + eventId + " не найдено.");
-        }
-
-        Long maxConfirmed = event.get().getParticipantLimit();
+        Long maxConfirmed = event.getParticipantLimit();
         Long cntParticipant = eventRequestRepository.countByEventIdAndStatus(
                 eventId, EventRequestStatus.CONFIRMED);
 
-        for (int i = 0; i < eventRequestIds.size(); i++) {
-            EventRequest eventRequest = getEventRequest(eventRequestIds.get(i), eventId, userId);
-            if (eventRequestStatusUpdateRequest.getStatus() == EventRequestStatus.CONFIRMED) {
-                if (maxConfirmed == 0 || cntParticipant < maxConfirmed) {
-                    // Если заявка еще не подтверждалась
-                    if (eventRequest.getStatus() != EventRequestStatus.CONFIRMED) {
-                        eventRequest.setStatus(EventRequestStatus.CONFIRMED);
-                        confirmRequests.add(eventRequest);
-                        cntParticipant++;
-                    }
-                } else {
-                    throw new NotAvailableException("Превышен лимит мест в событии с id: " + eventId);
-                }
-                eventRequestRepository.save(eventRequest);
-            } else {
-                if (eventRequest.getStatus() == EventRequestStatus.CONFIRMED) {
-                    throw new NotAvailableException("Нельзя отклонить заявку, так как она уже одобрена.");
-                }
-                eventRequest.setStatus(eventRequestStatusUpdateRequest.getStatus());
-                rejectRequests.add(eventRequest);
-                eventRequestRepository.save(eventRequest);
-            }
+        if (eventRequestStatusUpdateRequest.getStatus() == EventRequestStatus.CONFIRMED) {
+            confirmRequests = getConfirmedRequestsWithSaveStatus(eventId, userId,
+                    eventRequestStatusUpdateRequest, maxConfirmed, cntParticipant);
+        } else {
+            rejectRequests = getRejectedRequestsForSave(
+                    eventId, userId, eventRequestStatusUpdateRequest);
         }
 
         return EventRequestStatusUpdateResult.builder()
                 .confirmedRequests(confirmRequests)
                 .rejectedRequests(rejectRequests)
                 .build();
+
     }
 
     private User getUser(Long userId) {
@@ -185,21 +165,25 @@ public class EventRequestServiceImp implements EventRequestService {
                                 " для события c id: " + eventId));
     }
 
-    private List<EventRequest> getConfirmedRequestsForSave(
-            List<Long> eventRequestIds, Long eventId, Long userId,
+    private List<EventRequest> getConfirmedRequestsWithSaveStatus(
+            Long eventId, Long userId,
             EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest,
             Long maxConfirmed, Long cntParticipant) {
 
         List<EventRequest> confirmRequests = new ArrayList<>();
 
-        for (int i = 0; i < eventRequestIds.size(); i++) {
-            EventRequest eventRequest = getEventRequest(eventRequestIds.get(i), eventId, userId);
+        for (int i = 0; i < eventRequestStatusUpdateRequest.getRequestIds().size(); i++) {
+            EventRequest eventRequest = getEventRequest(
+                    eventRequestStatusUpdateRequest.getRequestIds().get(i), eventId, userId);
+
             if (maxConfirmed == 0 || cntParticipant < maxConfirmed) {
                 // Если заявка еще не подтверждалась
-                if (eventRequest.getStatus() != EventRequestStatus.CONFIRMED) {
+                if (eventRequest.getStatus() == EventRequestStatus.PENDING) {
                     eventRequest.setStatus(EventRequestStatus.CONFIRMED);
                     confirmRequests.add(eventRequest);
                     cntParticipant++;
+                } else {
+                    throw new NotAvailableException("Нельзя подтверждать заявку не в статусе PENDING");
                 }
             } else {
                 throw new NotAvailableException("Превышен лимит мест в событии с id: " + eventId);
@@ -211,14 +195,14 @@ public class EventRequestServiceImp implements EventRequestService {
     }
 
     private List<EventRequest> getRejectedRequestsForSave(
-            List<Long> eventRequestIds, Long eventId, Long userId,
-            EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest,
-            Long maxConfirmed, Long cntParticipant) {
+            Long eventId, Long userId,
+            EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest) {
 
         List<EventRequest> rejectRequests = new ArrayList<>();
 
-        for (int i = 0; i < eventRequestIds.size(); i++) {
-            EventRequest eventRequest = getEventRequest(eventRequestIds.get(i), eventId, userId);
+        for (int i = 0; i < eventRequestStatusUpdateRequest.getRequestIds().size(); i++) {
+            EventRequest eventRequest = getEventRequest(
+                    eventRequestStatusUpdateRequest.getRequestIds().get(i), eventId, userId);
 
             if (eventRequest.getStatus() == EventRequestStatus.CONFIRMED) {
                 throw new NotAvailableException("Нельзя отклонить заявку, так как она уже одобрена.");

@@ -467,7 +467,7 @@ public class EventServiceImpl implements EventService {
 
     private List<Event> findAllWithQueryAndSort(
             int startPage, int size, BooleanExpression query, Sort sort) {
-        return eventRepository.findAll(PageRequest.of(startPage, size, sort)).stream()
+        return eventRepository.findAll(query,PageRequest.of(startPage, size, sort)).stream()
                 .collect(Collectors.toList());
     }
 }
