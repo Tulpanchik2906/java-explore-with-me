@@ -1,6 +1,6 @@
 package ru.practicum.mappers;
 
-import ru.practicum.dto.CompilationDto;
+import ru.practicum.CompilationDto;
 import ru.practicum.model.Compilation;
 
 import java.util.stream.Collectors;

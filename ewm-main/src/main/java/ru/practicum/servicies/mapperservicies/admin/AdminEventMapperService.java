@@ -1,7 +1,7 @@
 package ru.practicum.servicies.mapperservicies.admin;
 
-import ru.practicum.dto.EventFullDto;
-import ru.practicum.dto.UpdateEventAdminRequest;
+import ru.practicum.EventFullDto;
+import ru.practicum.UpdateEventAdminRequest;
 
 import java.util.List;
 

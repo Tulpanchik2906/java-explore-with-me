@@ -1,22 +1,30 @@
-package ru.practicum.dto;
+package ru.practicum;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 @Data
 @Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class CategoryDto {
-
+public class UserDto {
+    @NotNull
     private Long id;
 
+    @Email
     @NotNull
-    @Size(min = 1, max = 50)
+    private String email;
+
+    @NotNull
+    @NotBlank
     private String name;
+
+    private double rating;
+
 }

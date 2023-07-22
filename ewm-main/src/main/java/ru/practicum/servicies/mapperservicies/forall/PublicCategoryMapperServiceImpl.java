@@ -2,7 +2,7 @@ package ru.practicum.servicies.mapperservicies.forall;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.dto.CategoryDto;
+import ru.practicum.CategoryDto;
 import ru.practicum.mappers.CategoryMapper;
 import ru.practicum.servicies.logicservicies.CategoryService;
 

@@ -2,8 +2,8 @@ package ru.practicum.servicies.mapperservicies.admin;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.dto.NewUserRequest;
-import ru.practicum.dto.UserDto;
+import ru.practicum.NewUserRequest;
+import ru.practicum.UserDto;
 import ru.practicum.mappers.UserMapper;
 import ru.practicum.servicies.logicservicies.UserService;
 

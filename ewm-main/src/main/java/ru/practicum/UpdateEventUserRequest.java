@@ -1,4 +1,4 @@
-package ru.practicum.dto;
+package ru.practicum;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -6,45 +6,45 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+import ru.practicum.annotation.NotBlankWithNull;
+import ru.practicum.enums.StateAction;
+import ru.practicum.util.DateTimeFormatterUtil;
 
 import javax.validation.constraints.Future;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data
 @Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class NewEventDto {
+public class UpdateEventUserRequest {
 
-    @NotBlank
     @Length(min = 20, max = 2000)
+    @NotBlankWithNull
     private String annotation;
 
-    @NotNull
     private Long category;
 
-    @NotBlank
     @Length(min = 20, max = 7000)
+    @NotBlankWithNull
     private String description;
 
-    @NotNull
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = DateTimeFormatterUtil.DATE_TIME_FORMATTER)
     @Future
     private LocalDateTime eventDate;
 
-    @NotNull
     private LocationDto location;
 
-    private Boolean paid = false;
+    private Boolean paid;
 
-    private Integer participantLimit = 0;
+    private Integer participantLimit;
 
-    private Boolean requestModeration = true;
+    private Boolean requestModeration;
 
-    @NotBlank
+    private StateAction stateAction;
+
     @Length(min = 3, max = 120)
+    @NotBlankWithNull
     private String title;
 
 }

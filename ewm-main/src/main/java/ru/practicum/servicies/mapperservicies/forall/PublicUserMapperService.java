@@ -1,6 +1,6 @@
 package ru.practicum.servicies.mapperservicies.forall;
 
-import ru.practicum.dto.*;
+import ru.practicum.*;
 
 import java.util.List;
 

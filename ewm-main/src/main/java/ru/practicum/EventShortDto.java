@@ -1,4 +1,4 @@
-package ru.practicum.dto;
+package ru.practicum;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import ru.practicum.enums.EventState;
+import ru.practicum.util.DateTimeFormatterUtil;
 
 @Data
 @Builder
@@ -18,7 +19,7 @@ public class EventShortDto {
 
     private Long confirmedRequests;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = DateTimeFormatterUtil.DATE_TIME_FORMATTER)
     private LocationDto eventDate;
 
     private Long id;

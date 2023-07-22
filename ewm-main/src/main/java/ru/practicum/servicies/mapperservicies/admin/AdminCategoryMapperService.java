@@ -1,7 +1,7 @@
 package ru.practicum.servicies.mapperservicies.admin;
 
-import ru.practicum.dto.CategoryDto;
-import ru.practicum.dto.NewCategoryDto;
+import ru.practicum.CategoryDto;
+import ru.practicum.NewCategoryDto;
 
 import java.util.List;
 

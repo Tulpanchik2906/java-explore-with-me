@@ -1,4 +1,4 @@
-package ru.practicum.dto;
+package ru.practicum;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import ru.practicum.annotation.NotBlankWithNull;
 import ru.practicum.enums.StateAction;
+import ru.practicum.util.DateTimeFormatterUtil;
 
 import javax.validation.constraints.Future;
 import java.time.LocalDateTime;
@@ -28,7 +29,7 @@ public class UpdateEventAdminRequest {
     @NotBlankWithNull
     private String description;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = DateTimeFormatterUtil.DATE_TIME_FORMATTER)
     @Future
     private LocalDateTime eventDate;
 

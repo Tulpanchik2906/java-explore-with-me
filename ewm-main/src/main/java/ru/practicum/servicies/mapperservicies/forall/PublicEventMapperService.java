@@ -1,6 +1,6 @@
 package ru.practicum.servicies.mapperservicies.forall;
 
-import ru.practicum.dto.EventFullDto;
+import ru.practicum.EventFullDto;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;

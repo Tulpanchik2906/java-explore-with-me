@@ -1,7 +1,7 @@
 package ru.practicum.servicies.mapperservicies.admin;
 
-import ru.practicum.dto.NewUserRequest;
-import ru.practicum.dto.UserDto;
+import ru.practicum.NewUserRequest;
+import ru.practicum.UserDto;
 
 import java.util.List;
 

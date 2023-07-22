@@ -2,7 +2,7 @@ package ru.practicum.servicies.mapperservicies.forall;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.dto.CompilationDto;
+import ru.practicum.CompilationDto;
 import ru.practicum.mappers.ExtendCompilationMapper;
 import ru.practicum.servicies.logicservicies.CompilationService;
 

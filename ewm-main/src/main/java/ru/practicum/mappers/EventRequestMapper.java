@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.factory.Mappers;
-import ru.practicum.dto.ParticipationRequestDto;
+import ru.practicum.ParticipationRequestDto;
 import ru.practicum.model.EventRequest;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)

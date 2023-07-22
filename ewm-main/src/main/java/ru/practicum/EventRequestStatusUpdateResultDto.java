@@ -1,10 +1,9 @@
-package ru.practicum.dto;
+package ru.practicum;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import ru.practicum.enums.EventRequestStatus;
 
 import java.util.List;
 
@@ -12,7 +11,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class EventRequestStatusUpdateRequest {
-    private List<Long> requestIds;
-    private EventRequestStatus status;
+public class EventRequestStatusUpdateResultDto {
+    private List<ParticipationRequestDto> confirmedRequests;
+    private List<ParticipationRequestDto> rejectedRequests;
 }

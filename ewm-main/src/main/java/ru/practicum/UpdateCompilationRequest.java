@@ -1,26 +1,24 @@
-package ru.practicum.dto;
+package ru.practicum;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+import ru.practicum.annotation.NotBlankWithNull;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Data
 @Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class NewCompilationDto {
+public class UpdateCompilationRequest {
     private Set<Long> events;
 
-    private Boolean pinned = false;
+    private Boolean pinned;
 
-    @NotNull
     @Length(min = 1, max = 50)
-    @NotBlank
+    @NotBlankWithNull
     private String title;
 }

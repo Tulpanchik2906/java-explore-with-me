@@ -1,6 +1,6 @@
 package ru.practicum.servicies.logicservicies;
 
-import ru.practicum.dto.EventRequestStatusUpdateRequest;
+import ru.practicum.EventRequestStatusUpdateRequest;
 import ru.practicum.enums.EventRequestStatus;
 import ru.practicum.model.EventRequest;
 import ru.practicum.servicies.params.CreateEventRequestParam;
