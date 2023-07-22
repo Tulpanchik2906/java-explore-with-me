@@ -36,8 +36,8 @@ public class PageUtil {
     /*
         В параметре list передаются элементы 2-х страниц
      */
-    public static List getPageListForTwoPage(
-            List list, int startFrom, int size) {
+    public static <T> List<T> getPageListByPage(
+            List<T> list, int startFrom, int size) {
         // Удалить все верхние item со страницы
         for (int i = 0; i < startFrom; i++) {
             if (!list.isEmpty()) {
@@ -47,6 +47,6 @@ public class PageUtil {
             }
         }
 
-        return (List) list.stream().limit(size).collect(Collectors.toList());
+        return list.stream().limit(size).collect(Collectors.toList());
     }
 }

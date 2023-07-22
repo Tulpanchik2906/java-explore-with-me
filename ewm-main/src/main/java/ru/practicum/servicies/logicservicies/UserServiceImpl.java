@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
         if (PageUtil.isTwoSite(from, size)) {
             List<User> list = userRepository.findByIdIn(ids, PageRequest.of(startPage, size));
             list.addAll(userRepository.findByIdIn(ids, PageRequest.of(startPage + 1, size)));
-            return PageUtil.getPageListForTwoPage(list,
+            return PageUtil.getPageListByPage(list,
                     PageUtil.getStartFrom(from, size), size);
         } else {
             return userRepository.findByIdIn(ids, PageRequest.of(startPage, size))
@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
                     .stream().collect(Collectors.toList());
             list.addAll(userRepository.findAll(PageRequest.of(startPage + 1, size))
                     .stream().collect(Collectors.toList()));
-            return PageUtil.getPageListForTwoPage(list,
+            return PageUtil.getPageListByPage(list,
                     PageUtil.getStartFrom(from, size), size);
         } else {
             return userRepository.findAll(PageRequest.of(startPage, size))

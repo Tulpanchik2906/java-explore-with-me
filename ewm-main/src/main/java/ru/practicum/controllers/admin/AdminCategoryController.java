@@ -24,8 +24,8 @@ public class AdminCategoryController {
     @GetMapping
     @ResponseBody
     public List<CategoryDto> getCategories(
-            @RequestParam(value = "from", required = false, defaultValue = "0") Integer from,
-            @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
+            @RequestParam(defaultValue = "0") Integer from,
+            @RequestParam(defaultValue = "10") Integer size) {
         log.info("Получен запрос на просмотр списка категорий. " +
                 "Параметры запроса: from: {}, size: {}. ", from, size);
 

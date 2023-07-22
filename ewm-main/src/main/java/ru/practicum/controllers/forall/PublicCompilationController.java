@@ -21,7 +21,7 @@ public class PublicCompilationController {
     private final PublicCompilationMapperService publicCompilationMapperService;
 
     @GetMapping("/{compId}")
-    public CompilationDto getCompilation(@PathVariable("compId") Long compId) {
+    public CompilationDto getCompilation(@PathVariable Long compId) {
         log.info("Получен запрос на получение подборки с compId: {}.", compId);
 
         return publicCompilationMapperService.getCompilation(compId);
@@ -30,8 +30,8 @@ public class PublicCompilationController {
     @GetMapping
     public List<CompilationDto> getCompilations(
             @RequestParam(required = false) Boolean pinned,
-            @PositiveOrZero @RequestParam(value = "from", required = false, defaultValue = "0") Integer from,
-            @Positive @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
+            @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
+            @Positive @RequestParam(defaultValue = "10") Integer size) {
         log.info("Получен запрос на получение списка подборок с параметрами: " +
                 "pinned={}, from={}, size={}", pinned, from, size);
 

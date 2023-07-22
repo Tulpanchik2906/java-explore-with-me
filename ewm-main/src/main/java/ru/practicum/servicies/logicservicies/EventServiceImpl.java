@@ -73,7 +73,7 @@ public class EventServiceImpl implements EventService {
             list.addAll(eventRepository.findByInitiatorId(userId,
                     PageRequest.of(startPage + 1, size)));
 
-            return PageUtil.getPageListForTwoPage(list,
+            return PageUtil.getPageListByPage(list,
                     PageUtil.getStartFrom(from, size), size);
         } else {
             return eventRepository.findByInitiatorId(userId,
@@ -401,7 +401,7 @@ public class EventServiceImpl implements EventService {
                             .stream().collect(Collectors.toList()));
                 }
 
-                res = new ArrayList<>(PageUtil.getPageListForTwoPage(list,
+                res = new ArrayList<>(PageUtil.getPageListByPage(list,
                         PageUtil.getStartFrom(searchEventParamForUser.getFrom(),
                                 searchEventParamForUser.getSize()), searchEventParamForUser.getSize()));
             } else {
@@ -437,7 +437,7 @@ public class EventServiceImpl implements EventService {
                                     PageRequest.of(startPage + 1, searchEventParamForUser.getSize()))
                             .stream().collect(Collectors.toList()));
                 }
-                res = new ArrayList<>(PageUtil.getPageListForTwoPage(list,
+                res = new ArrayList<>(PageUtil.getPageListByPage(list,
                         PageUtil.getStartFrom(searchEventParamForUser.getFrom(),
                                 searchEventParamForUser.getSize()), searchEventParamForUser.getSize()));
             } else {
@@ -473,7 +473,7 @@ public class EventServiceImpl implements EventService {
                                 PageRequest.of(startPage + 1, searchEventParamForAdmin.getSize()))
                         .stream().collect(Collectors.toList()));
 
-                return PageUtil.getPageListForTwoPage(list,
+                return PageUtil.getPageListByPage(list,
                         PageUtil.getStartFrom(searchEventParamForAdmin.getFrom(),
                                 searchEventParamForAdmin.getSize()), searchEventParamForAdmin.getSize());
             } else {
@@ -491,7 +491,7 @@ public class EventServiceImpl implements EventService {
                                 PageRequest.of(startPage + 1, searchEventParamForAdmin.getSize()))
                         .stream().collect(Collectors.toList()));
 
-                return PageUtil.getPageListForTwoPage(list,
+                return PageUtil.getPageListByPage(list,
                         PageUtil.getStartFrom(searchEventParamForAdmin.getFrom(),
                                 searchEventParamForAdmin.getSize()), searchEventParamForAdmin.getSize());
             } else {

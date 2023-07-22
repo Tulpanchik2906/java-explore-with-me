@@ -22,8 +22,8 @@ public class PublicCategoryController {
     @GetMapping
     @ResponseBody
     public List<CategoryDto> getCategories(
-            @PositiveOrZero @RequestParam(value = "from", required = false, defaultValue = "0") Integer from,
-            @Positive @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
+            @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
+            @Positive @RequestParam(defaultValue = "10") Integer size) {
         log.info("Получен запрос на получение списка категорий с параметрами: " +
                 "from={}, size={}.", from, size);
 

@@ -29,42 +29,28 @@ public class CompilationServiceImp implements CompilationService {
     @Override
     @Transactional(readOnly = true)
     public List<Compilation> findAll(Boolean pinned, int from, int size) {
+        List<Compilation> list = null;
         if (pinned != null) {
             BooleanExpression byPinned = QCompilation.compilation.pinned.eq(pinned);
             int startPage = PageUtil.getStartPage(from, size);
 
+            list = findAllByPageWithQuery(startPage, size, byPinned);
+
             if (PageUtil.isTwoSite(from, size)) {
-                List<Compilation> list = compilationRepository
-                        .findAll(byPinned, PageRequest.of(startPage, size)).stream()
-                        .collect(Collectors.toList());
-
-                list.addAll(compilationRepository.findAll(byPinned, PageRequest.of(startPage + 1, size))
-                        .stream().collect(Collectors.toList()));
-
-                return PageUtil.getPageListForTwoPage(list,
-                        PageUtil.getStartFrom(from, size), size);
-            } else {
-                return compilationRepository.findAll(byPinned, PageRequest.of(startPage, size))
-                        .stream().limit(size)
-                        .collect(Collectors.toList());
+                list.addAll(findAllByPageWithQuery(startPage + 1, size, byPinned));
             }
         } else {
             int startPage = PageUtil.getStartPage(from, size);
 
-            if (PageUtil.isTwoSite(from, size)) {
-                List<Compilation> list = (compilationRepository.findAll(PageRequest.of(startPage, size))
-                        .stream().collect(Collectors.toList()));
-                list.addAll(compilationRepository.findAll(PageRequest.of(startPage + 1, size))
-                        .stream().collect(Collectors.toList()));
+            list = findAllByPageWithOutQuery(startPage, size);
 
-                return PageUtil.getPageListForTwoPage(list,
-                        PageUtil.getStartFrom(from, size), size);
-            } else {
-                return compilationRepository.findAll(PageRequest.of(startPage, size))
-                        .stream().limit(size)
-                        .collect(Collectors.toList());
+            if (PageUtil.isTwoSite(from, size)) {
+                list.addAll(findAllByPageWithOutQuery(startPage + 1, size));
+
             }
         }
+        return PageUtil.getPageListByPage(list,
+                PageUtil.getStartFrom(from, size), size);
     }
 
     @Override
@@ -110,5 +96,15 @@ public class CompilationServiceImp implements CompilationService {
     public void delete(Long id) {
         get(id);
         compilationRepository.deleteById(id);
+    }
+
+    private List<Compilation> findAllByPageWithOutQuery(int startPage, int size) {
+        return compilationRepository.findAll(PageRequest.of(startPage, size))
+                .stream().collect(Collectors.toList());
+    }
+
+    private List<Compilation> findAllByPageWithQuery(int startPage, int size, BooleanExpression query) {
+        return compilationRepository.findAll(query, PageRequest.of(startPage, size))
+                .stream().collect(Collectors.toList());
     }
 }

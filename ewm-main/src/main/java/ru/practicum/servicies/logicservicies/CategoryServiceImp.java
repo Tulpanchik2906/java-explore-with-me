@@ -47,23 +47,25 @@ public class CategoryServiceImp implements CategoryService {
     public List<Category> findAll(Integer from, Integer size) {
         int startPage = PageUtil.getStartPage(from, size);
 
+        List<Category> list = findAllByPage(startPage, size);
+
         if (PageUtil.isTwoSite(from, size)) {
-            List<Category> list = categoryRepository.findAll(PageRequest.of(startPage, size))
-                    .stream().collect(Collectors.toList());
-            list.addAll(categoryRepository.findAll(PageRequest.of(startPage + 1, size))
-                    .stream().collect(Collectors.toList()));
-            return PageUtil.getPageListForTwoPage(list,
-                    PageUtil.getStartFrom(from, size), size);
-        } else {
-            return categoryRepository.findAll(PageRequest.of(startPage, size))
-                    .stream().limit(size)
-                    .collect(Collectors.toList());
+            list.addAll(findAllByPage(startPage + 1, size));
+
         }
+
+        return PageUtil.getPageListByPage(list,
+                PageUtil.getStartFrom(from, size), size);
     }
 
     @Override
     @Transactional
     public void delete(Long id) {
         categoryRepository.deleteById(id);
+    }
+
+    private List<Category> findAllByPage(int startPage, int size) {
+        return categoryRepository.findAll(PageRequest.of(startPage, size))
+                .stream().collect(Collectors.toList());
     }
 }

@@ -22,13 +22,13 @@ public class AdminEventController {
 
     @GetMapping
     public List<EventFullDto> getEventsForAdmin(
-            @Valid @RequestParam(value = "users", required = false) List<Long> users,
-            @Valid @RequestParam(value = "states", required = false) List<String> states,
-            @Valid @RequestParam(value = "categories", required = false) List<Long> categories,
-            @Valid @RequestParam(value = "rangeStart", required = false) String rangeStart,
-            @Valid @RequestParam(value = "rangeEnd", required = false) String rangeEnd,
-            @Valid @RequestParam(value = "from", required = false, defaultValue = "0") Integer from,
-            @Valid @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
+            @Valid @RequestParam(required = false) List<Long> users,
+            @Valid @RequestParam(required = false) List<String> states,
+            @Valid @RequestParam(required = false) List<Long> categories,
+            @Valid @RequestParam(required = false) String rangeStart,
+            @Valid @RequestParam(required = false) String rangeEnd,
+            @Valid @RequestParam(defaultValue = "0") Integer from,
+            @Valid @RequestParam(defaultValue = "10") Integer size) {
         log.info("Получен запрос на список событий для админа с параметрами:" +
                         "users: {}, states: {}, categories: {}, rangeStart: {}, rangeEnd: {}, " +
                         "from: {}, size: {}.",

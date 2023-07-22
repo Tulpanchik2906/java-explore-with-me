@@ -31,7 +31,7 @@ public class AdminCompilationController {
     }
 
     @PatchMapping("/{compId}")
-    public CompilationDto updateCompilation(@PathVariable("compId") Long compId,
+    public CompilationDto updateCompilation(@PathVariable Long compId,
                                             @Valid @RequestBody UpdateCompilationRequest updateCompilationRequest) {
         log.info("Получен запрос на изменение подборки, compId = {}, body={}", compId,
                 updateCompilationRequest.toString());
@@ -40,7 +40,7 @@ public class AdminCompilationController {
 
     @DeleteMapping("/{compId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCompilation(@PathVariable("compId") Long compId) {
+    public void deleteCompilation(@PathVariable Long compId) {
         log.info("Получен запрос на удаление подборки с id: {}", compId);
         adminCompilationMapperService.deleteCompilation(compId);
     }
