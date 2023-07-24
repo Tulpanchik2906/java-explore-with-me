@@ -57,6 +57,7 @@ public class EventServiceImpl implements EventService {
         event.setState(EventState.PENDING);
         event.setLocation(createEventParam.getLocation());
         event.setViews(0L);
+        event.setRating(0L);
 
         return eventRepository.save(event);
     }
@@ -218,7 +219,7 @@ public class EventServiceImpl implements EventService {
                     sort = Sort.by("eventDate");
                     break;
                 case RATING:
-                    sort = Sort.by("rating");
+                    sort = Sort.by("rating").descending();
             }
         }
 
@@ -467,7 +468,7 @@ public class EventServiceImpl implements EventService {
 
     private List<Event> findAllWithQueryAndSort(
             int startPage, int size, BooleanExpression query, Sort sort) {
-        return eventRepository.findAll(query,PageRequest.of(startPage, size, sort)).stream()
+        return eventRepository.findAll(query, PageRequest.of(startPage, size, sort)).stream()
                 .collect(Collectors.toList());
     }
 }

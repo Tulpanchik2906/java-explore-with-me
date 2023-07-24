@@ -50,5 +50,5 @@ public class EventFullDto {
 
     private Long views;
 
-    private double rating;
+    private Long rating;
 }

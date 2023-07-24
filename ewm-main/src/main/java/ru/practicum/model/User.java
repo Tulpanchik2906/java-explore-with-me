@@ -1,7 +1,6 @@
 package ru.practicum.model;
 
 import lombok.*;
-import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -18,21 +17,16 @@ import java.io.Serializable;
 @Table(name = "users")
 public class User implements Serializable {
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", unique = true, length = 200)
+    @Column(unique = true, length = 200)
     @NotBlank
     @NotNull
     private String name;
 
-    @Column(name = "email", unique = true)
+    @Column(unique = true)
     private String email;
 
-    @Transient
-    @Formula("(select count(l.user_id) " +
-            "from LIKES l " +
-            "where l.user_id = id AND status = 1)")
-    private double rating;
+    private Long rating;
 }

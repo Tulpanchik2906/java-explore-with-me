@@ -34,7 +34,6 @@ public class Like implements Serializable {
     @ManyToOne
     private Event event;
 
-    @Column(name = "status")
     @NotNull
     private Integer status;
 }

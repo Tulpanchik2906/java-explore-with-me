@@ -17,11 +17,10 @@ import java.io.Serializable;
 public class Category implements Serializable {
 
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", unique = true)
+    @Column(unique = true)
     @NotBlank
     private String name;
 }

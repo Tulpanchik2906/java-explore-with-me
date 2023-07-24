@@ -108,12 +108,22 @@ public class PublicUserMapperServiceImpl implements PublicUserMapperService {
     @Override
     public LikeDto likeEvent(Long userId, Long eventId) {
         return LikeMapper.INSTANCE.toLikeDto(
-                likeService.like(userId, eventId, 1));
+                likeService.addReaction(userId, eventId, 1));
     }
 
     @Override
     public LikeDto disLikeEvent(Long userId, Long eventId) {
         return LikeMapper.INSTANCE.toLikeDto(
-                likeService.like(userId, eventId, -1));
+                likeService.addReaction(userId, eventId, -1));
+    }
+
+    @Override
+    public void deleteLike(Long userId, Long eventId) {
+        likeService.deleteReaction(userId, eventId, 1);
+    }
+
+    @Override
+    public void deleteDisLike(Long userId, Long eventId) {
+        likeService.deleteReaction(userId, eventId, -1);
     }
 }

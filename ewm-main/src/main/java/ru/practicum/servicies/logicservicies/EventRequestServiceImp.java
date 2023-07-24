@@ -172,9 +172,8 @@ public class EventRequestServiceImp implements EventRequestService {
 
         List<EventRequest> confirmRequests = new ArrayList<>();
 
-        for (int i = 0; i < eventRequestStatusUpdateRequest.getRequestIds().size(); i++) {
-            EventRequest eventRequest = getEventRequest(
-                    eventRequestStatusUpdateRequest.getRequestIds().get(i), eventId, userId);
+        for (Long id : eventRequestStatusUpdateRequest.getRequestIds()) {
+            EventRequest eventRequest = getEventRequest(id, eventId, userId);
 
             if (maxConfirmed == 0 || cntParticipant < maxConfirmed) {
                 // Если заявка еще не подтверждалась
@@ -200,9 +199,8 @@ public class EventRequestServiceImp implements EventRequestService {
 
         List<EventRequest> rejectRequests = new ArrayList<>();
 
-        for (int i = 0; i < eventRequestStatusUpdateRequest.getRequestIds().size(); i++) {
-            EventRequest eventRequest = getEventRequest(
-                    eventRequestStatusUpdateRequest.getRequestIds().get(i), eventId, userId);
+        for (Long id : eventRequestStatusUpdateRequest.getRequestIds()) {
+            EventRequest eventRequest = getEventRequest(id, eventId, userId);
 
             if (eventRequest.getStatus() == EventRequestStatus.CONFIRMED) {
                 throw new NotAvailableException("Нельзя отклонить заявку, так как она уже одобрена.");

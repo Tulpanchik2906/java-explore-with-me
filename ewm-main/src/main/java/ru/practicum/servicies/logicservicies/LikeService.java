@@ -4,5 +4,8 @@ import ru.practicum.model.Like;
 
 public interface LikeService {
 
-    public Like like(Long userId, Long eventId, int status);
+    public Like addReaction(Long userId, Long eventId, int status);
+
+    public void deleteReaction(Long userId, Long eventId, int status);
+
 }

@@ -6,7 +6,8 @@ CREATE TABLE IF NOT EXISTS categories (
 CREATE TABLE IF NOT EXISTS users (
 	id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 	name VARCHAR(250) NOT NULL UNIQUE,
-	email varchar(320) NOT NULL UNIQUE
+	email varchar(320) NOT NULL UNIQUE,
+	rating BIGINT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS locations (
@@ -29,6 +30,7 @@ CREATE TABLE IF NOT EXISTS events (
 	request_moderation BOOLEAN NOT NULL,
 	title VARCHAR,
 	views BIGINT NOT NULL,
+	rating BIGINT NOT NULL,
 	state VARCHAR NOT NULL,
 	    CONSTRAINT fk_events_category FOREIGN KEY(category_id)
 	        REFERENCES categories(id),

@@ -106,8 +106,7 @@ public class PublicUserController {
 
     @PatchMapping("/{userId}/events/{eventId}/requests")
     public EventRequestStatusUpdateResultDto changeRequestStatus(
-            @PathVariable Long userId,
-            @PathVariable Long eventId,
+            @PathVariable Long userId, @PathVariable Long eventId,
             @Valid @RequestBody EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest) {
         log.info("Получен запрос на изменение статуса запросов на участия на событие с id: {} " +
                         " от пользователя c id: {}, body={}. ", userId, eventId,
@@ -131,11 +130,32 @@ public class PublicUserController {
     @PutMapping("/{userId}/dislike/{eventId}")
     @ResponseBody
     public LikeDto disLikeEvent(
-            @PathVariable Long userId,
-            @PathVariable Long eventId) {
+            @PathVariable Long userId, @PathVariable Long eventId) {
         log.info("Получен запрос на дизлайк событию {} от пользователя {}.",
                 eventId, userId);
 
         return publicUserMapperService.disLikeEvent(userId, eventId);
+    }
+
+    @DeleteMapping("/{userId}/like/{eventId}")
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteLikeEvent(
+            @PathVariable Long userId, @PathVariable Long eventId) {
+        log.info("Получен запрос на удаления лайка событию {} от пользователя {}.",
+                eventId, userId);
+
+        publicUserMapperService.deleteLike(userId, eventId);
+    }
+
+    @DeleteMapping("/{userId}/dislike/{eventId}")
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteDisLikeEvent(
+            @PathVariable Long userId, @PathVariable Long eventId) {
+        log.info("Получен запрос на удаление дизлайка событию {} от пользователя {}.",
+                eventId, userId);
+
+        publicUserMapperService.deleteDisLike(userId, eventId);
     }
 }

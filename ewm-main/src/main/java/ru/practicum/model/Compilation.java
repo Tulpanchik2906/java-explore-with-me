@@ -19,11 +19,9 @@ import java.util.List;
 public class Compilation implements Serializable {
 
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "pinned")
     @NotNull
     private Boolean pinned;
 
@@ -34,7 +32,6 @@ public class Compilation implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "event_id"))
     private List<Event> events;
 
-    @Column(name = "title")
     @NotBlank
     private String title;
 

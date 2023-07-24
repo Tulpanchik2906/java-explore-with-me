@@ -30,4 +30,8 @@ public interface PublicUserMapperService {
     LikeDto likeEvent(Long userId, Long eventId);
 
     LikeDto disLikeEvent(Long userId, Long eventId);
+
+    void deleteLike(Long userId, Long eventId);
+
+    void deleteDisLike(Long userId, Long eventId);
 }

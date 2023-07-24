@@ -1,7 +1,6 @@
 package ru.practicum.model;
 
 import lombok.*;
-import org.hibernate.annotations.Formula;
 import ru.practicum.enums.EventState;
 
 import javax.persistence.*;
@@ -21,11 +20,10 @@ import java.time.LocalDateTime;
 public class Event implements Serializable {
 
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "annotation", length = 2000)
+    @Column(length = 2000)
     @NotBlank
     private String annotation;
 
@@ -41,7 +39,7 @@ public class Event implements Serializable {
     @NotNull
     private LocalDateTime createdOn;
 
-    @Column(name = "description", length = 7000)
+    @Column(length = 7000)
     @NotBlank
     private String description;
 
@@ -59,7 +57,7 @@ public class Event implements Serializable {
     @NotNull
     private Location location;
 
-    @Column(name = "paid")
+
     @NotNull
     private Boolean paid;
 
@@ -74,22 +72,15 @@ public class Event implements Serializable {
     @NotNull
     private Boolean requestModeration;
 
-    @Column(name = "title")
     @NotBlank
     private String title;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "state")
     @NotNull
     private EventState state;
 
-    @Column(name = "views")
     @NotNull
     private Long views;
 
-    @Transient
-    @Formula("(select count(l.event_id) " +
-            "from LIKES l " +
-            "where l.event_id = id AND status = 1)")
-    private double rating;
+    private Long rating;
 }

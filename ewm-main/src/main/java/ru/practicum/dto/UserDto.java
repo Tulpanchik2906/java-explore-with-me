@@ -25,6 +25,6 @@ public class UserDto {
     @NotBlank
     private String name;
 
-    private double rating;
+    private Long rating;
 
 }

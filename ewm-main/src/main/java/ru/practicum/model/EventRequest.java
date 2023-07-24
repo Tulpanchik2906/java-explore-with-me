@@ -18,11 +18,9 @@ import java.time.LocalDateTime;
 @Table(name = "event_requests")
 public class EventRequest implements Serializable {
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "created")
     @NotNull
     private LocalDateTime created;
 
@@ -35,6 +33,5 @@ public class EventRequest implements Serializable {
     private User requester;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status")
     private EventRequestStatus status;
 }
