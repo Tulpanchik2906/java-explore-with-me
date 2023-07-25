@@ -3,6 +3,7 @@ package ru.practicum.service.mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.dto.ViewStats;
+import ru.practicum.exception.ValidationException;
 import ru.practicum.mapper.ViewStatsMapper;
 import ru.practicum.service.logic.HitService;
 import ru.practicum.service.logic.params.StatsSearchParam;
@@ -22,11 +23,19 @@ public class StatsMapperServiceImpl implements StatsMapperService {
 
     @Override
     public List<ViewStats> getStats(String start, String end, List<String> uris, Boolean unique) {
+        LocalDateTime startDateTime = LocalDateTime.parse(URLDecoder.decode(start),
+                DateTimeFormatter.ofPattern(DateTimeFormatterUtil.DATE_TIME_FORMATTER));
+
+        LocalDateTime endDateTime = LocalDateTime.parse(URLDecoder.decode(end),
+                DateTimeFormatter.ofPattern(DateTimeFormatterUtil.DATE_TIME_FORMATTER));
+
+        if (startDateTime.isAfter(endDateTime)) {
+            throw new ValidationException("Время начало должно быть раньше времени конца.");
+        }
+
         StatsSearchParam statsSearchParam = StatsSearchParam.builder()
-                .start(LocalDateTime.parse(URLDecoder.decode(start),
-                        DateTimeFormatter.ofPattern(DateTimeFormatterUtil.DATE_TIME_FORMATTER)))
-                .end(LocalDateTime.parse(URLDecoder.decode(end),
-                        DateTimeFormatter.ofPattern(DateTimeFormatterUtil.DATE_TIME_FORMATTER)))
+                .start(startDateTime)
+                .end(endDateTime)
                 .uris(uris)
                 .unique(unique)
                 .build();

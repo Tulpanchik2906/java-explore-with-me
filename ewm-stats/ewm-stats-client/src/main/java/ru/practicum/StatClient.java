@@ -23,7 +23,7 @@ public class StatClient {
     private final String serverUrl;
 
     @Autowired
-    public StatClient(@Value("${stats.url}") String serverUrl, RestTemplate restTemplate) {
+    public StatClient(@Value("${stat-server.url}") String serverUrl, RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
         this.serverUrl = serverUrl;
     }
