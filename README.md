@@ -11,3 +11,5 @@ Template repository for ExploreWithMe project.
 - Рейтинг пользователя виден только администраторам
 - Рейтинг инициатора события виден всем
 - Спецификацию на эндпоинты лайков/дизлайков можно посмотреть в feature-rating-spec.json
+
+Ссылка на пулреквест: https://github.com/Tulpanchik2906/java-explore-with-me/pull/5
