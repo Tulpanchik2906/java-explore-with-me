@@ -30,12 +30,16 @@ public class LikeServiceImp implements LikeService {
 
     private final EventRepository eventRepository;
 
+    /*
+        Метод добавления лайка/дизлайка
+     */
     @Override
     @Transactional
     public Like addReaction(Long userId, Long eventId, int status) {
         User user = getUser(userId);
         Event event = getEvent(eventId);
 
+        // проверка на опубликованность события
         if (event.getState() != EventState.PUBLISHED) {
             throw new NotAvailableException(
                     "Лайки можно ставить только опубликованным событиям");
@@ -52,6 +56,7 @@ public class LikeServiceImp implements LikeService {
         Optional<Like> oldLike = likeRepository.findByUserIdAndEventIdAndStatus(
                 userId, eventId, status);
 
+        // Проверка, что не пытаемся поставить повторный лайк
         if (oldLike.isPresent() &&
                 oldLike.get().getStatus() == status) {
             throw new DuplicateException(
@@ -68,6 +73,9 @@ public class LikeServiceImp implements LikeService {
         return likeRepository.save(like);
     }
 
+    /*
+         Метод удаления лайка/дизлайка
+    */
     @Override
     @Transactional
     public void deleteReaction(Long userId, Long eventId, int status) {
@@ -79,6 +87,7 @@ public class LikeServiceImp implements LikeService {
                     "Попытка удалить противоположную реакцию");
         }
 
+        // меняем рейтинг события и пользователя в зависимости от статуса
         if (like.getStatus() == 1) {
             changeRatingAfterDelete(eventId, 1);
         }
@@ -90,23 +99,27 @@ public class LikeServiceImp implements LikeService {
         likeRepository.deleteById(likeKey);
     }
 
+    // поиск пользователя
     private User getUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(
                 () -> new NotFoundException(
                         "Пользователь с id: " + userId + " не найден."));
     }
 
+    // поиск события
     private Event getEvent(Long eventId) {
         return eventRepository.findById(eventId).orElseThrow(
                 () -> new NotFoundException(
                         "Событие с id: " + eventId + " не найдена."));
     }
 
+    // поиск лайка
     private Like getLikeByLikeKey(LikeKey likeKey) {
         return likeRepository.findById(likeKey).orElseThrow(
                 () -> new NotFoundException("Лайк не найден"));
     }
 
+    // изменение рейтинга после удаления реакции
     private void changeRatingAfterDelete(Long eventId, int change) {
         Event event = getEvent(eventId);
         event.setRating(event.getRating() - change);
@@ -116,6 +129,7 @@ public class LikeServiceImp implements LikeService {
         userRepository.save(event.getInitiator());
     }
 
+    // изменение рейтинга после добавления реакции
     private void changeRatingAfterAddReaction(Long eventId, int change) {
         Event event = getEvent(eventId);
         event.setRating(event.getRating() + change);
