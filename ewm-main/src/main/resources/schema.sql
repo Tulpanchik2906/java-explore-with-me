@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS locations (
 	lat NUMERIC NOT NULL,
 	lon NUMERIC NOT NULL
 );
+
 CREATE TABLE IF NOT EXISTS events (
 	id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 	annotation VARCHAR(2000) NOT NULL,
@@ -67,6 +68,7 @@ CREATE TABLE IF NOT EXISTS event_vs_compilations (
     		  REFERENCES compilations(id) ON DELETE CASCADE,
     	PRIMARY KEY (event_id, compilation_id)
 );
+
 
 CREATE TABLE IF NOT EXISTS likes (
     user_id BIGINT NOT NULL,

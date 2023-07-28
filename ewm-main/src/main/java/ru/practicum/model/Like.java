@@ -6,6 +6,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
+/*
+    Модель лайка
+ */
 @Getter
 @Setter
 @ToString

@@ -17,6 +17,9 @@ import ru.practicum.storage.UserRepository;
 
 import java.util.Optional;
 
+/*
+    Сервис работы с лайками и расчетом рейтинига
+ */
 @Service
 @RequiredArgsConstructor
 public class LikeServiceImp implements LikeService {

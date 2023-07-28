@@ -50,5 +50,6 @@ public class EventFullDto {
 
     private Long views;
 
+    // рейтинг события
     private Long rating;
 }

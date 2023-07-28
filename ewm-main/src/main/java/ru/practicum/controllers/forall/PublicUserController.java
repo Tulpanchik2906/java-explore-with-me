@@ -116,6 +116,7 @@ public class PublicUserController {
                 eventRequestStatusUpdateRequest);
     }
 
+    //Контроллер добавления лайка для фичи рейтингов
     @PutMapping("/{userId}/like/{eventId}")
     @ResponseBody
     public LikeDto likeEvent(
@@ -127,6 +128,7 @@ public class PublicUserController {
         return publicUserMapperService.likeEvent(userId, eventId);
     }
 
+    //Контроллер добавления дизлайка для фичи рейтингов
     @PutMapping("/{userId}/dislike/{eventId}")
     @ResponseBody
     public LikeDto disLikeEvent(
@@ -137,6 +139,7 @@ public class PublicUserController {
         return publicUserMapperService.disLikeEvent(userId, eventId);
     }
 
+    //Контроллер удаления лайка для фичи рейтингов
     @DeleteMapping("/{userId}/like/{eventId}")
     @ResponseBody
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -148,6 +151,7 @@ public class PublicUserController {
         publicUserMapperService.deleteLike(userId, eventId);
     }
 
+    //Контроллер удаления дизлайка для фичи рейтингов
     @DeleteMapping("/{userId}/dislike/{eventId}")
     @ResponseBody
     @ResponseStatus(HttpStatus.NO_CONTENT)

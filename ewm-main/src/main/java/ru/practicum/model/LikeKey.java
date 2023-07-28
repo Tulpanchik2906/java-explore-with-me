@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
+/*
+    Ключ для таблицы лайков
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

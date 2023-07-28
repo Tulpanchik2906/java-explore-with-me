@@ -6,6 +6,7 @@ import ru.practicum.model.LikeKey;
 
 import java.util.Optional;
 
+// репозиторий работы с лайками
 public interface LikeRepository extends JpaRepository<Like, LikeKey> {
 
     public Optional<Like> findByUserIdAndEventIdAndStatus(

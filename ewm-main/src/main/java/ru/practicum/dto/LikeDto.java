@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+/*
+    Dto лайка
+ */
 @Data
 @Builder
 @AllArgsConstructor
