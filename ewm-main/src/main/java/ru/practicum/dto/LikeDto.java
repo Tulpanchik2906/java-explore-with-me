@@ -13,11 +13,8 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class LikeDto {
-
     private Long userId;
-
     private Long eventId;
-
     private Integer status;
 
 }

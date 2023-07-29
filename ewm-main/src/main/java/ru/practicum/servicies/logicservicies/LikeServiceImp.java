@@ -24,9 +24,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class LikeServiceImp implements LikeService {
 
-    private final LikeRepository likeRepository;
-
     private final UserRepository userRepository;
+
+    private final LikeRepository likeRepository;
 
     private final EventRepository eventRepository;
 
@@ -36,40 +36,42 @@ public class LikeServiceImp implements LikeService {
     @Override
     @Transactional
     public Like addReaction(Long userId, Long eventId, int status) {
-        User user = getUser(userId);
         Event event = getEvent(eventId);
+        User user = getUser(userId);
 
         // проверка на опубликованность события
         if (event.getState() != EventState.PUBLISHED) {
-            throw new NotAvailableException(
-                    "Лайки можно ставить только опубликованным событиям");
+            throw new NotAvailableException("Лайки можно ставить только опубликованным событиям");
         }
 
         Like like = Like.builder()
-                .userId(userId)
                 .eventId(eventId)
+                .userId(userId)
                 .user(user)
                 .event(event)
                 .status(status)
                 .build();
 
+        // Проверяем есть ли уже по этим id лайки или дизлайки
         Optional<Like> oldLike = likeRepository.findByUserIdAndEventIdAndStatus(
                 userId, eventId, status);
 
         // Проверка, что не пытаемся поставить повторный лайк
-        if (oldLike.isPresent() &&
-                oldLike.get().getStatus() == status) {
+        if (oldLike.isPresent() && oldLike.get().getStatus() == status) {
             throw new DuplicateException(
-                    "Такой статус уже выставлен пользователем " + userId +
-                            "для события: " + eventId);
+                    "Такой статус уже выставлен пользователем "
+                            + userId + "для события: " + eventId);
         }
 
+        // Если реакции есть, то удаляем старую реакцию и добавляем новую.
         if (oldLike.isPresent()) {
             deleteReaction(userId, eventId, oldLike.get().getStatus());
         }
 
+        // Пересчет рейтинга
         changeRatingAfterAddReaction(eventId, status);
 
+        // Сохранить обновления
         return likeRepository.save(like);
     }
 
@@ -101,31 +103,34 @@ public class LikeServiceImp implements LikeService {
 
     // поиск пользователя
     private User getUser(Long userId) {
-        return userRepository.findById(userId).orElseThrow(
-                () -> new NotFoundException(
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(
                         "Пользователь с id: " + userId + " не найден."));
     }
 
     // поиск события
     private Event getEvent(Long eventId) {
-        return eventRepository.findById(eventId).orElseThrow(
-                () -> new NotFoundException(
+        return eventRepository.findById(eventId)
+                .orElseThrow(() -> new NotFoundException(
                         "Событие с id: " + eventId + " не найдена."));
     }
 
     // поиск лайка
     private Like getLikeByLikeKey(LikeKey likeKey) {
-        return likeRepository.findById(likeKey).orElseThrow(
-                () -> new NotFoundException("Лайк не найден"));
+        return likeRepository.findById(likeKey)
+                .orElseThrow(() -> new NotFoundException("Лайк не найден"));
     }
 
     // изменение рейтинга после удаления реакции
     private void changeRatingAfterDelete(Long eventId, int change) {
         Event event = getEvent(eventId);
         event.setRating(event.getRating() - change);
+
         eventRepository.save(event);
+
         event.getInitiator().setRating(
                 event.getInitiator().getRating() - change);
+
         userRepository.save(event.getInitiator());
     }
 
@@ -133,9 +138,12 @@ public class LikeServiceImp implements LikeService {
     private void changeRatingAfterAddReaction(Long eventId, int change) {
         Event event = getEvent(eventId);
         event.setRating(event.getRating() + change);
+
         eventRepository.save(event);
+
         event.getInitiator().setRating(
                 event.getInitiator().getRating() + change);
+
         userRepository.save(event.getInitiator());
     }
 }
