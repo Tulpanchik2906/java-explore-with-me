@@ -8,6 +8,6 @@ import java.util.Optional;
 
 // репозиторий работы с лайками
 public interface LikeRepository extends JpaRepository<Like, LikeKey> {
-    Optional<Like> findByUserIdAndEventIdAndStatus(
-            Long userId, Long eventId, Integer status);
+    Optional<Like> findByUserIdAndEventId(
+            Long userId, Long eventId);
 }

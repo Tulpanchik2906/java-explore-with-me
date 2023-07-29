@@ -53,8 +53,8 @@ public class LikeServiceImp implements LikeService {
                 .build();
 
         // Проверяем есть ли уже по этим id лайки или дизлайки
-        Optional<Like> oldLike = likeRepository.findByUserIdAndEventIdAndStatus(
-                userId, eventId, status);
+        Optional<Like> oldLike = likeRepository.findByUserIdAndEventId(
+                userId, eventId);
 
         // Проверка, что не пытаемся поставить повторный лайк
         if (oldLike.isPresent() && oldLike.get().getStatus() == status) {
