@@ -6,6 +6,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
+/*
+    Модель лайка
+ */
 @Getter
 @Setter
 @ToString
@@ -19,21 +22,21 @@ public class Like implements Serializable {
 
     @Id
     @Column(name = "user_id")
-    private Long userId;
+    private Long userId; // колонка для ключа
 
     @Id
     @Column(name = "event_id")
-    private Long eventId;
+    private Long eventId; // колонка для ключа
 
     @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
     @ManyToOne
-    private User user;
+    private User user; // колонка для объекта
 
     @Id
     @JoinColumn(name = "event_id", referencedColumnName = "id", insertable = false, updatable = false)
     @ManyToOne
-    private Event event;
+    private Event event; // колонка для события
 
     @NotNull
-    private Integer status;
+    private Integer status; // колонка статус (1-лайк, -1 - дизлайк)
 }

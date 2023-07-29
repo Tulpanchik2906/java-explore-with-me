@@ -27,11 +27,15 @@ public interface PublicUserMapperService {
             Long userId, Long eventId,
             EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest);
 
+    // добавление лайка событию
     LikeDto likeEvent(Long userId, Long eventId);
 
+    // добавление дизлайка событию
     LikeDto disLikeEvent(Long userId, Long eventId);
 
+    // удаление лайка
     void deleteLike(Long userId, Long eventId);
 
+    // удаление дизлайка
     void deleteDisLike(Long userId, Long eventId);
 }

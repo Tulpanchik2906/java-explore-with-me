@@ -25,6 +25,7 @@ public class UserDto {
     @NotBlank
     private String name;
 
+    // рейтинг пользователя
     private Long rating;
 
 }

@@ -116,43 +116,43 @@ public class PublicUserController {
                 eventRequestStatusUpdateRequest);
     }
 
+    //Контроллер добавления лайка для фичи рейтингов
     @PutMapping("/{userId}/like/{eventId}")
     @ResponseBody
     public LikeDto likeEvent(
-            @PathVariable Long userId,
-            @PathVariable Long eventId) {
-        log.info("Получен запрос на лайк событию {} от пользователя {}.",
+            @PathVariable Long userId, @PathVariable Long eventId) {
+        log.info("Получен запрос на лайк событию {} от пользователя {} .",
                 eventId, userId);
 
         return publicUserMapperService.likeEvent(userId, eventId);
     }
 
+    //Контроллер добавления дизлайка для фичи рейтингов
     @PutMapping("/{userId}/dislike/{eventId}")
     @ResponseBody
-    public LikeDto disLikeEvent(
-            @PathVariable Long userId, @PathVariable Long eventId) {
+    public LikeDto disLikeEvent(@PathVariable Long userId, @PathVariable Long eventId) {
         log.info("Получен запрос на дизлайк событию {} от пользователя {}.",
                 eventId, userId);
 
         return publicUserMapperService.disLikeEvent(userId, eventId);
     }
 
+    //Контроллер удаления лайка для фичи рейтингов
     @DeleteMapping("/{userId}/like/{eventId}")
     @ResponseBody
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteLikeEvent(
-            @PathVariable Long userId, @PathVariable Long eventId) {
+    public void deleteLikeEvent(@PathVariable Long userId, @PathVariable Long eventId) {
         log.info("Получен запрос на удаления лайка событию {} от пользователя {}.",
                 eventId, userId);
 
         publicUserMapperService.deleteLike(userId, eventId);
     }
 
+    //Контроллер удаления дизлайка для фичи рейтингов
     @DeleteMapping("/{userId}/dislike/{eventId}")
     @ResponseBody
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteDisLikeEvent(
-            @PathVariable Long userId, @PathVariable Long eventId) {
+    public void deleteDisLikeEvent(@PathVariable Long userId, @PathVariable Long eventId) {
         log.info("Получен запрос на удаление дизлайка событию {} от пользователя {}.",
                 eventId, userId);
 

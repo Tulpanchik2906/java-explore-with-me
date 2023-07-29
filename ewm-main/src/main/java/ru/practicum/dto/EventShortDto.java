@@ -32,6 +32,7 @@ public class EventShortDto {
 
     private Long views;
 
+    // рейтинг события
     private Long rating;
     private EventState state;
 }
